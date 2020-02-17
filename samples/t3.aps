@@ -1,0 +1,7 @@
+[
+echo (mul (add x 42) (sub 3 (div y z)))
+]
+
+
+
+
