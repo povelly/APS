@@ -17,7 +17,7 @@ public class ASTfunctionType implements IASTtype {
 	}
 
 	public IASTtype getReturnType() {
-		return returnType;
+		return this.returnType;
 	}
 
 	@Override

@@ -13,13 +13,24 @@ ident = [a-z][a-zA-Z0-9]*
 nls = \n | \r | \r\n
 %%
 
-/* operators */
-"add" { return Parser.PLUS; }
-"sub" { return Parser.MINUS; }
-"mul" { return Parser.TIMES; }
-"div" { return Parser.DIV; }
+/* reserved symbols */
+"[" { return Parser.LBRA; }
+"]" { return Parser.RBRA; }
+"(" { return Parser.LPAR; }
+")" { return Parser.RPAR; }
 
-/* functions */
+";" { return Parser.PV; }
+":" { return Parser.DP; }
+"," { return Parser.VG; }
+"*" { return Parser.STAR; }
+"->" { return Parser.ARROW; }
+
+/* declarations */
+"const" { return Parser.CONST; }
+"fun" { return Parser.FUN; }
+"rec" { return Parser.REC; }
+
+/* statements */
 "echo" { return Parser.ECHO; }
 
 /* primitive types */
@@ -30,16 +41,13 @@ nls = \n | \r | \r\n
 "true" { return Parser.TRUE; }
 "false" { return Parser.FALSE; }
 
-/* parenthesis */
-"(" { return Parser.LPAR; }
-")" { return Parser.RPAR; }
-"[" { return Parser.LBRA; }
-"]" { return Parser.RBRA; }
+/* operators */
+"add" { return Parser.PLUS; }
+"sub" { return Parser.MINUS; }
+"mul" { return Parser.TIMES; }
+"div" { return Parser.DIV; }
 
-
-";" { return Parser.PV; }
-
-
+"if" { return Parser.IF; }
 
 
 /* newline */

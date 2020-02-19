@@ -1,18 +1,18 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTnode;
 
-public class ASTcommands implements IASTexpression {
+public class ASTcommands implements IASTnode {
 
-	private final IASTexpression expression;
+	private final IASTnode expression;
 	private final ASTcommands next;
 
-	public ASTcommands(IASTexpression expression, ASTcommands next) {
+	public ASTcommands(IASTnode expression, ASTcommands next) {
 		this.expression = expression;
 		this.next = next;
 	}
 
-	public IASTexpression getExpression() {
+	public IASTnode getExpression() {
 		return this.expression;
 	}
 

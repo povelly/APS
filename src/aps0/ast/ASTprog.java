@@ -1,8 +1,8 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTnode;
 
-public class ASTprog implements IASTexpression {
+public class ASTprog implements IASTnode {
 
 	private final ASTcommands commands;
 

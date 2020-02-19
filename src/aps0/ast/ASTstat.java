@@ -1,8 +1,8 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTnode;
 
-public class ASTstat implements IASTexpression {
+public class ASTstat implements IASTnode {
 
 	public ASTstat() {
 		super();

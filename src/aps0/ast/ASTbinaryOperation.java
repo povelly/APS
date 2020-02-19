@@ -15,15 +15,15 @@ public class ASTbinaryOperation implements IASTexpression {
 	}
 
 	public Operator getOperator() {
-		return operator;
+		return this.operator;
 	}
 
 	public IASTexpression getLeftOperand() {
-		return leftOperand;
+		return this.leftOperand;
 	}
 
 	public IASTexpression getRightOperand() {
-		return rightOperand;
+		return this.rightOperand;
 	}
 
 	@Override

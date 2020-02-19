@@ -1,3 +1,4 @@
 [
-echo int*int
+echo bool;
+echo int
 ]

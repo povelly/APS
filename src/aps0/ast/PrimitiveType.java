@@ -13,7 +13,7 @@ public enum PrimitiveType implements IASTtype {
 
 	@Override
 	public String toPrologString() {
-		return this.name;
+		return name;
 	}
 
 }

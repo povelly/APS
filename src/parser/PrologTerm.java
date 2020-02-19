@@ -2,17 +2,17 @@ package parser;
 
 import java.io.*;
 
-import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTnode;
 
 public class PrologTerm {
 
 	public static void main(String args[]) {
 		Parser yyparser;
-		IASTexpression prog;
+		IASTnode prog;
 		try {
 			yyparser = new Parser(new InputStreamReader(new FileInputStream(args[0])));
 			yyparser.yyparse();
-			prog = (IASTexpression) yyparser.yyval.obj;
+			prog = (IASTnode) yyparser.yyval.obj;
 
 			if (prog != null)
 				System.out.println(prog.toPrologString());

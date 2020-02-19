@@ -2,7 +2,7 @@ package aps0.ast;
 
 import aps0.interfaces.IASTexpression;
 
-public class ASTboolean implements IASTexpression {
+public class ASTboolean implements IASTexpression{
 	
 	private final boolean value;
 	
