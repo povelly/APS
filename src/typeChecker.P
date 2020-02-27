@@ -1,0 +1,37 @@
+main_stdin :-
+read(user_input,T),
+typeCheck(T, R),
+print(R),
+nl,
+exitCode(R).
+
+typeCheck(P, ok) :- typeProg(P).
+typeCheck(_, ko).
+
+typeProg(P) :- typeCommand(CMDS).
+typeCommand(CMDS) :- typeStat(STAT)
+typeCommand(CMDS) :- typeDec(DEC)
+
+typeStat(STAT) :- typeExpr(EXPR)
+typeDec(DEC) :- typeDec()
+
+typeExpr(_, true, bool).
+typeExpr(_, false, bool).
+typeExpr(_, val, int) :- integer(val).
+typeExpr(G, val, T) :- env_get(G, val, T).
+typeExpr(G, if(expr1, expr2, expr3), T):-typeExpr(G, expr1, bool), typeExpr(G, expr2, T), typeExpr(G, expr3, T).
+
+typeExpr(G, not(expr1), bool) :- typeExpr(G,expr1, bool).
+typeExpr(G, and(expr1, expr2), bool) :- typeExpr(G,expr1, bool), typeExpr(G,expr2, bool).
+typeExpr(G, or(expr1, expr2), bool) :- typeExpr(G,expr1, bool), typeExpr(G,expr2, bool).
+
+typeExpr(G, lt(expr1,expr2), bool) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, eq(expr1,expr2), bool) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, add(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, sub(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, mul(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, div(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+
+
+exitCode(ok) :- halt(0).
+exitCode(_) :- halt(1).

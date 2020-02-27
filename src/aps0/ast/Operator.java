@@ -2,14 +2,22 @@ package aps0.ast;
 
 public enum Operator {
 
-	ADD("add"), SUB("sub"), MUL("mul"), DIV("div");
+	ADD("add"),
+	SUB("sub"),
+	MUL("mul"),
+	DIV("div"),
+	AND("and"),
+	OR("or"),
+	EQ("eq"),
+	LT("lt"),
+	NOT("not");
 	private String name;
 
 	Operator(String name) {
 		this.name = name;
 	}
 
-	public String toString() {
+	public String getName() {
 		return this.name;
 	}
 

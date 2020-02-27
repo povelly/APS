@@ -27,7 +27,7 @@ public class ASTcommands implements IASTnode {
 		while (currentCommand != null) {
 			commands += currentCommand.getExpression().toPrologString();
 			if (currentCommand.getNext() != null)
-				commands += ",\n ";
+				commands += ";\n ";
 			currentCommand = currentCommand.getNext();
 		}
 		return commands;

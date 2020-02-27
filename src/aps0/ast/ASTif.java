@@ -26,10 +26,15 @@ public class ASTif implements IASTexpression {
 		return this.alternant;
 	}
 
+//	@Override
+//	public String toPrologString() {
+//		return "if (" + condition.toPrologString() + ") {\n" + consequence.toPrologString() + "\n} else {\n"
+//				+ alternant.toPrologString() + "\n}";
+//	}
+	
 	@Override
 	public String toPrologString() {
-		return "if (" + condition.toPrologString() + ") {\n" + consequence.toPrologString() + "\n} else {\n"
-				+ alternant.toPrologString() + "\n}";
+		return "if(" + condition.toPrologString() + ", " + consequence.toPrologString() + ", " + alternant.toPrologString() + ")";
 	}
 
 }

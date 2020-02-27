@@ -58,10 +58,10 @@ cmds: stat { $$ = new ASTcommands((IASTnode)$1, null); }
 ;
 
 stat: ECHO expr { $$ = new ASTecho((IASTexpression)$2); }
-| ECHO type { $$ = new PRINT((IASTtype)$2); } //a suppr
-| ECHO types { $$ = new PRINT((ASTtypes)$2); }
-| ECHO args { $$ = new PRINT_LIST((ArrayList<ASTarg>)$2); }
-| ECHO dec { $$ = new PRINT((IASTdec)$2); }
+//| ECHO type { $$ = new PRINT((IASTtype)$2); } //a suppr
+//| ECHO types { $$ = new PRINT((ASTtypes)$2); }
+//| ECHO args { $$ = new PRINT_LIST((ArrayList<ASTarg>)$2); }
+//| ECHO dec { $$ = new PRINT((IASTdec)$2); }
 ;
 
 arg: IDENT DP type { $$ = new ASTarg(new ASTid($1), new ASTtypes((IASTtype)$3)); }
@@ -98,11 +98,16 @@ NUM { $$ = new ASTnum($1); }
 | TRUE { $$ = new ASTboolean(true); }
 | FALSE { $$ = new ASTboolean(false); }
 | LPAR IF expr expr expr RPAR { $$ = new ASTif((IASTexpression)$3, (IASTexpression)$4, (IASTexpression)$5); }
-| LPAR PLUS expr expr RPAR { $$ = new ASTbinaryOperation(Operator.ADD, (IASTexpression)$3, (IASTexpression)$4); }
-| LPAR MINUS expr expr RPAR { $$ = new ASTbinaryOperation(Operator.SUB, (IASTexpression)$3, (IASTexpression)$4); }
-| LPAR TIMES expr expr RPAR { $$ = new ASTbinaryOperation(Operator.MUL, (IASTexpression)$3, (IASTexpression)$4); }
-| LPAR DIV expr expr RPAR { $$ = new ASTbinaryOperation(Operator.DIV, (IASTexpression)$3, (IASTexpression)$4); }
-| LBRA args RBRA expr { $$ = new ASTfunctionnalAbstraction((ArrayList<ASTarg>) $2, (IASTexpression) $4);}
+| LPAR PLUS expr expr RPAR { $$ = new ASToperation(Operator.ADD, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR MINUS expr expr RPAR { $$ = new ASToperation(Operator.SUB, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR TIMES expr expr RPAR { $$ = new ASToperation(Operator.MUL, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR DIV expr expr RPAR { $$ = new ASToperation(Operator.DIV, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR AND expr expr RPAR { $$ = new ASToperation(Operator.AND, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR OR expr expr RPAR { $$ = new ASToperation(Operator.OR, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR NOT expr RPAR { $$ = new ASToperation(Operator.NOT, (IASTexpression)$3); }
+| LPAR EQ expr expr RPAR { $$ = new ASToperation(Operator.EQ, (IASTexpression)$3, (IASTexpression)$4); }
+| LPAR LT expr expr RPAR { $$ = new ASToperation(Operator.LT, (IASTexpression)$3, (IASTexpression)$4); }
+| LBRA args RBRA expr { $$ = new ASTlambda((ArrayList<ASTarg>) $2, (IASTexpression) $4);}
 | LPAR expr exprs RPAR = { $$ = new ASTapplication((IASTexpression)$2, (ArrayList<IASTexpression>)$3); }
 ;
 exprs:

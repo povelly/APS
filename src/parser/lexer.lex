@@ -47,6 +47,14 @@ nls = \n | \r | \r\n
 "mul" { return Parser.TIMES; }
 "div" { return Parser.DIV; }
 
+"and" { return Parser.AND; }
+"or" { return Parser.OR; }
+"not" { return Parser.NOT; }
+
+"=" { return Parser.EQ; }
+"<" { return Parser.LT; }
+
+
 "if" { return Parser.IF; }
 
 

@@ -16,6 +16,6 @@ public class ASTid implements IASTexpression {
 
 	@Override
 	public String toPrologString() {
-		return "var(" + name + ")";
+		return name;
 	}
 }

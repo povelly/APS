@@ -24,10 +24,10 @@ public class ASTapplication implements IASTexpression {
 
 	@Override
 	public String toPrologString() {
-		String s = expr.toPrologString() + "(\n";
-		for (IASTexpression expr : this.exprs)
-			s += expr.toPrologString() + ",\n";
-		s += ")";
+		String s = "application(" + expr.toPrologString() + ", (";
+		for (int i = 0; i < exprs.size() - 1; i++)
+			s += exprs.get(i).toPrologString() + ", ";
+		s += exprs.get(exprs.size() - 1).toPrologString() + "))";
 		return s;
 	}
 

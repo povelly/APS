@@ -35,13 +35,23 @@ public class ASTfun implements IASTdec {
 		return this.expr;
 	}
 
+	// @Override
+	// public String toPrologString() {
+	// String s = "FUN " + types.toPrologString() + " " + name.toPrologString() + "
+	// (";
+	// for (ASTarg arg : args)
+	// s += arg.toPrologString();
+	// s += ") {\n" + expr.toPrologString() + "\n}";
+	// return s;
+	// }
+
 	@Override
 	public String toPrologString() {
-		String s = "FUN " + types.toPrologString() + " " + name.toPrologString() + " (";
-			for (ASTarg arg : args)
-				s += arg.toPrologString();
-		s += ") {\n" + expr.toPrologString() + "\n}";
+		String s = "funDef(" + name.toPrologString() + ", " + types.toPrologString() + ", [";
+		for (int i = 0; i < args.size() - 1; i++)
+			s += args.get(i).toPrologString() + ", ";
+		s += args.get(args.size() - 1).toPrologString() + "], " + expr.toPrologString() + ")";
 		return s;
 	}
-	
+
 }

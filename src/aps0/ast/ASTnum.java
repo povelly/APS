@@ -14,8 +14,15 @@ public class ASTnum implements IASTexpression {
 		return this.val;
 	}
 
+//	@Override
+//	public String toPrologString() {
+//		return ("num(" + val + ")");
+//	}
+	
 	@Override
 	public String toPrologString() {
-		return ("num(" + val + ")");
+		return val + "";
 	}
+	
+	
 }

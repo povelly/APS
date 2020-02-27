@@ -16,7 +16,7 @@ public class ASTprog implements IASTnode {
 
 	@Override
 	public String toPrologString() {
-		return "[" + commands.toPrologString() + "]";
+		return commands.toPrologString() + ".";
 	}
 
 }

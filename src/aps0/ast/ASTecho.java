@@ -17,7 +17,7 @@ public class ASTecho implements IASTnode {
 
 	@Override
 	public String toPrologString() {
-		return "echo(" + expr.toPrologString() + ")";
+		return "print(" + expr.toPrologString() + ")";
 	}
 
 }
