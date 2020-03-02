@@ -2,24 +2,24 @@ package aps0.ast;
 
 import java.util.ArrayList;
 
-import aps0.interfaces.IASTdec;
+import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
 
-public class ASTfunRec implements IASTdec {
+public class ASTfunRec implements IASTdeclaration {
 
-	private final ASTid name;
+	private final ASTident name;
 	private final ASTtypes types;
 	private final ArrayList<ASTarg> args;
 	private final IASTexpression expr;
 
-	public ASTfunRec(ASTid name, ASTtypes types, ArrayList<ASTarg> args, IASTexpression expr) {
+	public ASTfunRec(ASTident name, ASTtypes types, ArrayList<ASTarg> args, IASTexpression expr) {
 		this.name = name;
 		this.types = types;
 		this.args = args;
 		this.expr = expr;
 	}
 
-	public ASTid getName() {
+	public ASTident getName() {
 		return this.name;
 	}
 

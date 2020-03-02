@@ -1,21 +1,21 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTdec;
+import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
 
-public class ASTconst implements IASTdec {
+public class ASTconst implements IASTdeclaration {
 
-	private final ASTid name;
+	private final ASTident name;
 	private final ASTtypes types;
 	private final IASTexpression expr;
 
-	public ASTconst(ASTid name, ASTtypes types, IASTexpression expr) {
+	public ASTconst(ASTident name, ASTtypes types, IASTexpression expr) {
 		this.name = name;
 		this.types = types;
 		this.expr = expr;
 	}
 
-	public ASTid getName() {
+	public ASTident getName() {
 		return this.name;
 	}
 

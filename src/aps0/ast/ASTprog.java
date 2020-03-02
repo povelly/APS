@@ -1,22 +1,30 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTnode;
+import java.util.List;
 
-public class ASTprog implements IASTnode {
+import aps0.interfaces.IASTcommand;
+import aps0.interfaces.IASTprogram;
 
-	private final ASTcommands commands;
+public class ASTprog implements IASTprogram {
 
-	public ASTprog(ASTcommands cmd) {
-		this.commands = cmd;
+	private final List<IASTcommand> commands;
+
+	public ASTprog(List<IASTcommand> commands) {
+		this.commands = commands;
 	}
 
-	public ASTcommands getCommands() {
+	public List<IASTcommand> getCommands() {
 		return this.commands;
 	}
 
 	@Override
 	public String toPrologString() {
-		return commands.toPrologString() + ".";
+		String commands = "";
+		for (int i = 0; i < this.commands.size() - 1; i++) {
+			commands += this.commands.get(i).toPrologString() + ";\n";
+		}
+		commands += this.commands.get(this.commands.size() - 1).toPrologString() + ".";
+		return commands;
 	}
 
 }

@@ -2,11 +2,11 @@ package aps0.ast;
 
 import aps0.interfaces.IASTexpression;
 
-public class ASTid implements IASTexpression {
+public class ASTident implements IASTexpression {
 	
 	private final String name;
 
-	public ASTid(String name) {
+	public ASTident(String name) {
 		this.name = name;
 	}
 	

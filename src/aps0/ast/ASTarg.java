@@ -1,18 +1,18 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTnode;
+import aps0.interfaces.IASTargument;
 
-public class ASTarg implements IASTnode {
+public class ASTarg implements IASTargument {
 
-	private final ASTid name;
+	private final ASTident name;
 	private final ASTtypes types;
 
-	public ASTarg(ASTid name, ASTtypes types) {
+	public ASTarg(ASTident name, ASTtypes types) {
 		this.name = name;
 		this.types = types;
 	}
 
-	public ASTid getName() {
+	public ASTident getName() {
 		return this.name;
 	}
 

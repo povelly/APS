@@ -1,6 +1,6 @@
 package aps0.ast;
 
-import aps0.interfaces.IASTdec;
+import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTnode;
 import aps0.interfaces.IASTtype;
@@ -17,7 +17,7 @@ public class PRINT implements IASTexpression {
 		this.node = types;
 	}
 	
-	public PRINT(IASTdec cst) {
+	public PRINT(IASTdeclaration cst) {
 		this.node = cst;
 	}
 	

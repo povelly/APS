@@ -2,12 +2,12 @@ package aps0.ast;
 
 import aps0.interfaces.IASTtype;
 
-public enum PrimitiveType implements IASTtype {
+public enum ASTprimitiveType implements IASTtype {
 	
 	INTEGER("int"), BOOLEAN("boolean");
 	private String name;
 
-	PrimitiveType(String name) {
+	ASTprimitiveType(String name) {
 		this.name = name;
 	}
 

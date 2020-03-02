@@ -11,6 +11,7 @@ public enum Operator {
 	EQ("eq"),
 	LT("lt"),
 	NOT("not");
+	
 	private String name;
 
 	Operator(String name) {

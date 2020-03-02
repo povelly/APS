@@ -1,9 +1,9 @@
 package aps0.ast;
 
 import aps0.interfaces.IASTexpression;
-import aps0.interfaces.IASTnode;
+import aps0.interfaces.IASTstatement;
 
-public class ASTecho implements IASTnode {
+public class ASTecho implements IASTstatement {
 	
 	private final IASTexpression expr;
 	

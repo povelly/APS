@@ -18,14 +18,14 @@ then
 	for arg in $SAMPLES_DIR/*.aps
 	do
 	  echo -e "\n$arg :"
-	  #$JAVA $MAIN_CLASS $arg
+	  $JAVA $MAIN_CLASS $arg
 	  $JAVA $MAIN_CLASS $arg > "$arg.P"
 	done
 else
 	for arg in $*
 	do
 	  echo -e "\n$arg :"
-		#$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
-		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg > "$arg.P"
+		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
+		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg > "$SAMPLES_DIR/$arg.P"
 	done
 fi

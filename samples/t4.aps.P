@@ -1,2 +1,2 @@
-print(42);
- print(43).
+print(43);
+print(42).
