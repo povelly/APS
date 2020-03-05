@@ -1,6 +1,7 @@
 package aps0.ast;
 
 import aps0.interfaces.IASTargument;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTarg implements IASTargument {
 
@@ -23,6 +24,12 @@ public class ASTarg implements IASTargument {
 	@Override
 	public String toPrologString() {
 		return "(" + name.toPrologString() + ", " + types.toPrologString() + ")";
+	}
+
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
 	}
 
 }

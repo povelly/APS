@@ -4,22 +4,10 @@ import java.util.ArrayList;
 
 import aps0.interfaces.IASTexpression;
 
-public class ASTlambda implements IASTexpression {
-
-	private final ArrayList<ASTarg> args;
-	private final IASTexpression expr;
+public class ASTlambda extends AbstractFun implements IASTexpression {
 	
 	public ASTlambda(ArrayList<ASTarg> args, IASTexpression expr) {
-		this.args = args;
-		this.expr = expr;
-	}
-
-	public ArrayList<ASTarg> getArgs() {
-		return this.args;
-	}
-	
-	public IASTexpression getExpr() {
-		return this.expr;
+		super(args, expr);
 	}
 	
 //	@Override

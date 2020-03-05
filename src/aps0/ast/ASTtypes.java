@@ -2,6 +2,7 @@ package aps0.ast;
 
 import aps0.interfaces.IASTnode;
 import aps0.interfaces.IASTtype;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTtypes implements IASTnode {
 	
@@ -39,4 +40,10 @@ public class ASTtypes implements IASTnode {
 		return types;
 	}
 
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
+	}
+	
 }

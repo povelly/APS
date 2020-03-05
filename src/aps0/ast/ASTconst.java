@@ -2,6 +2,7 @@ package aps0.ast;
 
 import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTconst implements IASTdeclaration {
 
@@ -34,7 +35,13 @@ public class ASTconst implements IASTdeclaration {
 
 	@Override
 	public String toPrologString() {
-		return "const(" + name.toPrologString() + ", " + expr.toPrologString() + ")";
+		return "const(" + name.toPrologString() + ", " + types.toPrologString() + ", " + expr.toPrologString() + ")";
+	}
+	
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
 	}
 
 }

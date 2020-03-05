@@ -4,6 +4,7 @@ import java.util.List;
 
 import aps0.interfaces.IASTcommand;
 import aps0.interfaces.IASTprogram;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTprog implements IASTprogram {
 
@@ -26,5 +27,18 @@ public class ASTprog implements IASTprogram {
 		commands += this.commands.get(this.commands.size() - 1).toPrologString() + ".";
 		return commands;
 	}
+	
+//	@Override
+//	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+//			throws Err {
+//		return (Result) ((IASTvisitor)visitor).visit(this, env);
+//	}
+	
+    @Override
+	public <Result, Env, Err extends Exception> 
+    Result accept(IASTvisitor<Result, Env, Err> visitor, Env data)
+            throws Err {
+        return visitor.visit(this, data);
+    }
 
 }

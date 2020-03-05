@@ -3,6 +3,7 @@ package aps0.ast;
 import java.util.ArrayList;
 
 import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTapplication implements IASTexpression {
 
@@ -29,6 +30,12 @@ public class ASTapplication implements IASTexpression {
 			s += exprs.get(i).toPrologString() + ", ";
 		s += exprs.get(exprs.size() - 1).toPrologString() + "))";
 		return s;
+	}
+	
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
 	}
 
 }

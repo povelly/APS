@@ -8,29 +8,41 @@ exitCode(R).
 typeCheck(P, ok) :- typeProg(P).
 typeCheck(_, ko).
 
-typeProg(P) :- typeCommand(CMDS).
-typeCommand(CMDS) :- typeStat(STAT)
-typeCommand(CMDS) :- typeDec(DEC)
+typeProg(G, CMDS, void) :- typeCommand(G, CMDS, void).
+typeCommand(_, [], _).
+typeCommand(G, STAT, G) :- typeStat(G, STAT, G).
+typeCommand(G1, [DEC|CMDS], G2) :- typeDec(G1, DEC, G2), typeCommand(G1, CMDS, G2).
+typeCommand(G1, [STAT|CMDS], G2) :- typeStat(G1, STAT, G2), typeCommand(G1, CMDS, G2).
 
-typeStat(STAT) :- typeExpr(EXPR)
-typeDec(DEC) :- typeDec()
+typeStat(G, echo(E), void) :- typeExpr(G, E, int).
+typeDec(G1, const(V, T, E), G2) :- typeExpr(G1, E, T), addEnv(G1, [var(V, T, E)], G2).
+typeDec(G1, funDef(V, T, ARGS, E), G3) :- addEnv(G1, ARGS, G2), typeExpr(G2, E, T), addEnv(G2, V, G3).
+typeDec(G1, funRecDef(V, T, ARGS, E), G4) :- addEnv(G1, ARGS, G2), addEnv(G2, V, G3) typeExpr(G3, E, T), addEnv(G3, V, G4).
 
 typeExpr(_, true, bool).
 typeExpr(_, false, bool).
 typeExpr(_, val, int) :- integer(val).
-typeExpr(G, val, T) :- env_get(G, val, T).
-typeExpr(G, if(expr1, expr2, expr3), T):-typeExpr(G, expr1, bool), typeExpr(G, expr2, T), typeExpr(G, expr3, T).
+typeExpr(G1, if(E1, E2, E3), G2) :- typeExpr(G, E1, bool), typeExpr(G1, E2, G2), typeExpr(G1, E3, G2).
 
-typeExpr(G, not(expr1), bool) :- typeExpr(G,expr1, bool).
-typeExpr(G, and(expr1, expr2), bool) :- typeExpr(G,expr1, bool), typeExpr(G,expr2, bool).
-typeExpr(G, or(expr1, expr2), bool) :- typeExpr(G,expr1, bool), typeExpr(G,expr2, bool).
+typeExpr(G, not(E), bool) :- typeExpr(G, E, bool).
+typeExpr(G, and(E1, E2), bool) :- typeExpr(G, E1, bool), typeExpr(G, E2, bool).
+typeExpr(G, or(E1, E2), bool) :- typeExpr(G, E1, bool), typeExpr(G, E2, bool).
 
-typeExpr(G, lt(expr1,expr2), bool) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
-typeExpr(G, eq(expr1,expr2), bool) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
-typeExpr(G, add(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
-typeExpr(G, sub(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
-typeExpr(G, mul(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
-typeExpr(G, div(expr1,expr2), int) :- typeExpr(G,expr1, int), typeExpr(G,expr2, int).
+typeExpr(G, lt(E1, E2), bool) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+typeExpr(G, eq(E1, E2), bool) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+typeExpr(G, add(E1, E2), int) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+typeExpr(G, sub(E1, E2), int) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+typeExpr(G, mul(E1, E2), int) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+typeExpr(G, div(E1, E2), int) :- typeExpr(G, E1, int), typeExpr(G, E2, int).
+
+typeExpr(G1, lambda(ARGS, E), T) :- addEnv(G1, ARGS, G2), typeExpr(G2, E, T).
+typeExpr(G, application(E1, E2), T) :- typeExpr(G, E1, type()), typeExprs(G, E2, T).
+/*^ le type de e1 c'est un type de fonction */
+
+
+
+addEnv(G, [], G), !.
+addEnv(G1, L, G2) :- append(G1, L, G2), !.
 
 
 exitCode(ok) :- halt(0).

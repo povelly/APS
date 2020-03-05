@@ -2,37 +2,12 @@ package aps0.ast;
 
 import java.util.ArrayList;
 
-import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
 
-public class ASTfunRec implements IASTdeclaration {
-
-	private final ASTident name;
-	private final ASTtypes types;
-	private final ArrayList<ASTarg> args;
-	private final IASTexpression expr;
-
+public class ASTfunRec extends AbstractNamedFun {
+	
 	public ASTfunRec(ASTident name, ASTtypes types, ArrayList<ASTarg> args, IASTexpression expr) {
-		this.name = name;
-		this.types = types;
-		this.args = args;
-		this.expr = expr;
-	}
-
-	public ASTident getName() {
-		return this.name;
-	}
-
-	public ASTtypes getTypes() {
-		return this.types;
-	}
-
-	public ArrayList<ASTarg> getArgs() {
-		return this.args;
-	}
-
-	public IASTexpression getExpr() {
-		return this.expr;
+		super(name, types, args, expr);
 	}
 
 //	@Override
@@ -52,4 +27,5 @@ public class ASTfunRec implements IASTdeclaration {
 		s += args.get(args.size() - 1).toPrologString() + "], " + expr.toPrologString() + ")";
 		return s;
 	}
+	
 }

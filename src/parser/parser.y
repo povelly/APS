@@ -2,6 +2,7 @@
   import java.io.*;
   import java.util.ArrayList;
   import java.util.List;
+  import java.util.Arrays;
   import aps0.ast.*;
   import aps0.interfaces.*;
 %}
@@ -43,18 +44,26 @@ line : prog { e = (IASTnode)$1; }
 prog: LBRA cmds RBRA { $$ = new ASTprog((List<IASTcommand>)$2); }
 ;
 
+/*
 cmds: stat { List<IASTcommand> r = new ArrayList<IASTcommand>();
 r.add((IASTcommand)$1);
 $$ = r; }
 | dec PV cmds { ((List<IASTcommand>)$3).add((IASTcommand)$1); $$ = $3; }
 | stat PV cmds { ((List<IASTcommand>)$3).add((IASTcommand)$1); $$ = $3; }
+; */
+
+cmds: stat { List<IASTcommand> r = new ArrayList<IASTcommand>();
+r.add((IASTcommand)$1);
+$$ = r; }
+| dec PV cmds { List<IASTcommand> r = new ArrayList<IASTcommand>(Arrays.asList((IASTcommand)$1));
+r.addAll((List<IASTcommand>)$3);
+$$ = r; }
+| stat PV cmds { List<IASTcommand> r = new ArrayList<IASTcommand>(Arrays.asList((IASTcommand)$1));
+r.addAll((List<IASTcommand>)$3);
+$$ = r; }
 ;
 
 stat: ECHO expr { $$ = new ASTecho((IASTexpression)$2); }
-//| ECHO type { $$ = new PRINT((IASTtype)$2); } //a suppr
-//| ECHO types { $$ = new PRINT((ASTtypes)$2); }
-//| ECHO args { $$ = new PRINT_LIST((ArrayList<ASTarg>)$2); }
-//| ECHO dec { $$ = new PRINT((IASTdec)$2); }
 ;
 
 arg: IDENT DP type { $$ = new ASTarg(new ASTident($1), new ASTtypes((IASTtype)$3)); }
@@ -99,11 +108,23 @@ NUM { $$ = new ASTnum($1); }
 | LBRA args RBRA expr { $$ = new ASTlambda((ArrayList<ASTarg>) $2, (IASTexpression) $4);}
 | LPAR expr exprs RPAR = { $$ = new ASTapplication((IASTexpression)$2, (ArrayList<IASTexpression>)$3); }
 ;
+
+/*
 exprs:
 expr { List<IASTexpression> r = new ArrayList<IASTexpression>();
 r.add((IASTexpression)$1);
 $$ = r; }
 | expr exprs { ((List<IASTexpression>)$2).add((IASTexpression)$1); $$ = $2; }
+;
+*/
+
+exprs:
+expr { List<IASTexpression> r = new ArrayList<IASTexpression>();
+r.add((IASTexpression)$1);
+$$ = r; }
+| expr exprs { List<IASTexpression> r = new ArrayList<IASTexpression>(Arrays.asList((IASTexpression)$1));
+r.addAll((List<IASTexpression>)$2);
+$$ = r; }
 ;
 %%
 

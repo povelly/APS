@@ -1,6 +1,7 @@
 package aps0.ast;
 
 import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTvisitor;
 
 public class ASToperation implements IASTexpression {
 
@@ -43,6 +44,12 @@ public class ASToperation implements IASTexpression {
 		if (operator == Operator.NOT)
 			return operator.getName() + "(" + leftOperand.toPrologString() + ")";
 		return operator.getName() + "(" + leftOperand.toPrologString() + ", " + rightOperand.toPrologString() + ")";
+	}
+	
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
 	}
 
 }

@@ -1,6 +1,7 @@
 package aps0.ast;
 
 import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IASTvisitor;
 
 public class ASTif implements IASTexpression {
 
@@ -35,6 +36,12 @@ public class ASTif implements IASTexpression {
 	@Override
 	public String toPrologString() {
 		return "if(" + condition.toPrologString() + ", " + consequence.toPrologString() + ", " + alternant.toPrologString() + ")";
+	}
+	
+	@Override
+	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
+			throws Err {
+		return visitor.visit(this, env);
 	}
 
 }

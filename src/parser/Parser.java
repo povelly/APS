@@ -21,9 +21,10 @@ package parser;
   import java.io.*;
   import java.util.ArrayList;
   import java.util.List;
+  import java.util.Arrays;
   import aps0.ast.*;
   import aps0.interfaces.*;
-//#line 23 "Parser.java"
+//#line 24 "Parser.java"
 
 
 
@@ -344,7 +345,7 @@ final static String yyrule[] = {
 "exprs : expr exprs",
 };
 
-//#line 109 "parser.y"
+//#line 130 "parser.y"
 
 	public IASTnode e;
 	private Yylex lexer;
@@ -367,7 +368,7 @@ final static String yyrule[] = {
 	public Parser(Reader r) {
 	lexer = new Yylex(r, this);
 	}
-//#line 298 "Parser.java"
+//#line 299 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -522,152 +523,158 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
-//#line 40 "parser.y"
+//#line 41 "parser.y"
 { e = (IASTnode)val_peek(0).obj; }
 break;
 case 2:
-//#line 43 "parser.y"
+//#line 44 "parser.y"
 { yyval.obj = new ASTprog((List<IASTcommand>)val_peek(1).obj); }
 break;
 case 3:
-//#line 46 "parser.y"
+//#line 55 "parser.y"
 { List<IASTcommand> r = new ArrayList<IASTcommand>();
 r.add((IASTcommand)val_peek(0).obj);
 yyval.obj = r; }
 break;
 case 4:
-//#line 49 "parser.y"
-{ ((List<IASTcommand>)val_peek(0).obj).add((IASTcommand)val_peek(2).obj); yyval.obj = val_peek(0).obj; }
+//#line 58 "parser.y"
+{ List<IASTcommand> r = new ArrayList<IASTcommand>(Arrays.asList((IASTcommand)val_peek(2).obj));
+r.addAll((List<IASTcommand>)val_peek(0).obj);
+yyval.obj = r; }
 break;
 case 5:
-//#line 50 "parser.y"
-{ ((List<IASTcommand>)val_peek(0).obj).add((IASTcommand)val_peek(2).obj); yyval.obj = val_peek(0).obj; }
+//#line 61 "parser.y"
+{ List<IASTcommand> r = new ArrayList<IASTcommand>(Arrays.asList((IASTcommand)val_peek(2).obj));
+r.addAll((List<IASTcommand>)val_peek(0).obj);
+yyval.obj = r; }
 break;
 case 6:
-//#line 53 "parser.y"
+//#line 66 "parser.y"
 { yyval.obj = new ASTecho((IASTexpression)val_peek(0).obj); }
 break;
 case 7:
-//#line 60 "parser.y"
+//#line 69 "parser.y"
 { yyval.obj = new ASTarg(new ASTident(val_peek(2).sval), new ASTtypes((IASTtype)val_peek(0).obj)); }
 break;
 case 8:
-//#line 64 "parser.y"
+//#line 73 "parser.y"
 { ArrayList<ASTarg> r = new ArrayList<ASTarg>();
 r.add((ASTarg)val_peek(0).obj);
 yyval.obj = r; }
 break;
 case 9:
-//#line 67 "parser.y"
+//#line 76 "parser.y"
 { ((ArrayList<ASTarg>)val_peek(0).obj).add((ASTarg)val_peek(2).obj); java.util.Collections.reverse((ArrayList<ASTarg>)val_peek(0).obj); yyval.obj = val_peek(0).obj; }
 break;
 case 10:
-//#line 70 "parser.y"
+//#line 79 "parser.y"
 { yyval.obj = ASTprimitiveType.BOOLEAN; }
 break;
 case 11:
-//#line 71 "parser.y"
+//#line 80 "parser.y"
 { yyval.obj = ASTprimitiveType.INTEGER; }
 break;
 case 12:
-//#line 72 "parser.y"
+//#line 81 "parser.y"
 { yyval.obj = new ASTfunctionType((ASTtypes)val_peek(3).obj, (IASTtype)val_peek(1).obj); }
 break;
 case 13:
-//#line 75 "parser.y"
+//#line 84 "parser.y"
 { yyval.obj = new ASTtypes((IASTtype)val_peek(0).obj); }
 break;
 case 14:
-//#line 76 "parser.y"
+//#line 85 "parser.y"
 { yyval.obj = new ASTtypes((IASTtype)val_peek(2).obj, (ASTtypes)val_peek(0).obj); }
 break;
 case 15:
-//#line 79 "parser.y"
+//#line 88 "parser.y"
 { yyval.obj = new ASTconst(new ASTident(val_peek(2).sval), new ASTtypes((IASTtype)val_peek(1).obj), (IASTexpression)val_peek(0).obj); }
 break;
 case 16:
-//#line 80 "parser.y"
+//#line 89 "parser.y"
 { yyval.obj = new ASTfun(new ASTident(val_peek(5).sval), new ASTtypes((IASTtype)val_peek(4).obj), (ArrayList<ASTarg>)val_peek(2).obj, (IASTexpression)val_peek(0).obj); }
 break;
 case 17:
-//#line 81 "parser.y"
+//#line 90 "parser.y"
 {yyval.obj = new ASTfunRec(new ASTident(val_peek(5).sval), new ASTtypes((IASTtype)val_peek(4).obj), (ArrayList<ASTarg>)val_peek(2).obj, (IASTexpression) val_peek(0).obj ); }
 break;
 case 18:
-//#line 85 "parser.y"
+//#line 94 "parser.y"
 { yyval.obj = new ASTnum(val_peek(0).ival); }
 break;
 case 19:
-//#line 86 "parser.y"
+//#line 95 "parser.y"
 { yyval.obj = new ASTident(val_peek(0).sval); }
 break;
 case 20:
-//#line 87 "parser.y"
+//#line 96 "parser.y"
 { yyval.obj = new ASTboolean(true); }
 break;
 case 21:
-//#line 88 "parser.y"
+//#line 97 "parser.y"
 { yyval.obj = new ASTboolean(false); }
 break;
 case 22:
-//#line 89 "parser.y"
+//#line 98 "parser.y"
 { yyval.obj = new ASTif((IASTexpression)val_peek(3).obj, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 23:
-//#line 90 "parser.y"
+//#line 99 "parser.y"
 { yyval.obj = new ASToperation(Operator.ADD, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 24:
-//#line 91 "parser.y"
+//#line 100 "parser.y"
 { yyval.obj = new ASToperation(Operator.SUB, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 25:
-//#line 92 "parser.y"
+//#line 101 "parser.y"
 { yyval.obj = new ASToperation(Operator.MUL, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 26:
-//#line 93 "parser.y"
+//#line 102 "parser.y"
 { yyval.obj = new ASToperation(Operator.DIV, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 27:
-//#line 94 "parser.y"
+//#line 103 "parser.y"
 { yyval.obj = new ASToperation(Operator.AND, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 28:
-//#line 95 "parser.y"
+//#line 104 "parser.y"
 { yyval.obj = new ASToperation(Operator.OR, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 29:
-//#line 96 "parser.y"
+//#line 105 "parser.y"
 { yyval.obj = new ASToperation(Operator.NOT, (IASTexpression)val_peek(1).obj); }
 break;
 case 30:
-//#line 97 "parser.y"
+//#line 106 "parser.y"
 { yyval.obj = new ASToperation(Operator.EQ, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 31:
-//#line 98 "parser.y"
+//#line 107 "parser.y"
 { yyval.obj = new ASToperation(Operator.LT, (IASTexpression)val_peek(2).obj, (IASTexpression)val_peek(1).obj); }
 break;
 case 32:
-//#line 99 "parser.y"
+//#line 108 "parser.y"
 { yyval.obj = new ASTlambda((ArrayList<ASTarg>) val_peek(2).obj, (IASTexpression) val_peek(0).obj);}
 break;
 case 33:
-//#line 100 "parser.y"
+//#line 109 "parser.y"
  { yyval.obj = new ASTapplication((IASTexpression)val_peek(2).obj, (ArrayList<IASTexpression>)val_peek(1).obj); }
 break;
 case 34:
-//#line 103 "parser.y"
+//#line 122 "parser.y"
 { List<IASTexpression> r = new ArrayList<IASTexpression>();
 r.add((IASTexpression)val_peek(0).obj);
 yyval.obj = r; }
 break;
 case 35:
-//#line 106 "parser.y"
-{ ((List<IASTexpression>)val_peek(0).obj).add((IASTexpression)val_peek(1).obj); yyval.obj = val_peek(0).obj; }
+//#line 125 "parser.y"
+{ List<IASTexpression> r = new ArrayList<IASTexpression>(Arrays.asList((IASTexpression)val_peek(1).obj));
+r.addAll((List<IASTexpression>)val_peek(0).obj);
+yyval.obj = r; }
 break;
-//#line 593 "Parser.java"
+//#line 600 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
