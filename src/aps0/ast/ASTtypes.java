@@ -27,7 +27,7 @@ public class ASTtypes implements IASTnode {
 		return this.next;
 	}
 
-	@Override
+	//@Override
 	public String toPrologString() {
 		String types = "";
 		ASTtypes currentType = this;

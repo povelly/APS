@@ -2,10 +2,10 @@ LEX_J = ./jflex
 YACC_J = ./yacc.linux -J -Jpackage=parser 
 JAVAC = javac -sourcepath ../
 
-all: prologTerm runInterpreter
-
-prologTerm: parser PrologTerm.java
-	$(JAVAC) PrologTerm.java
+all: runCompiler runInterpreter
+	
+runCompiler: parser RunCompiler.java
+	$(JAVAC) RunCompiler.java
 
 runInterpreter: parser RunInterpreter.java
 	$(JAVAC) RunInterpreter.java

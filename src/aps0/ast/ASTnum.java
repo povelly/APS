@@ -22,7 +22,7 @@ public class ASTnum implements IASTexpression {
 	
 	@Override
 	public String toPrologString() {
-		return val + "";
+		return val.toString();
 	}
 	
 	@Override

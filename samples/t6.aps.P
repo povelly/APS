@@ -1,1 +1,0 @@
-print(add(sub(x, 2), 6)).

@@ -5,15 +5,15 @@ import aps0.ast.ASTarg;
 import aps0.ast.ASTboolean;
 import aps0.ast.ASTconst;
 import aps0.ast.ASTecho;
+import aps0.ast.ASTfun;
+import aps0.ast.ASTfunRec;
 import aps0.ast.ASTident;
 import aps0.ast.ASTif;
+import aps0.ast.ASTlambda;
 import aps0.ast.ASTnum;
 import aps0.ast.ASToperation;
 import aps0.ast.ASTtypes;
-import aps0.ast.AbstractFun;
-import aps0.ast.AbstractNamedFun;
 import aps0.interfaces.IASTcommand;
-import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTprogram;
 import aps0.interfaces.IASTtype;
 import aps0.interfaces.IASTvisitor;
@@ -28,19 +28,34 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(IASTprogram node, Context context) throws Exception {
-		for (IASTcommand command : node.getCommands()) {
+		for (IASTcommand command : node.getCommands())
 			command.accept(this, context);
-		}
 		return null;
 	}
 
 	@Override
-	public Object visit(IASTcommand node, Context context) throws Exception {
-		return node.accept(this, context);
+	public Object visit(ASTecho node, Context context) throws Exception {
+		System.out.println(node.getExpr().accept(this, context));
+		return null;
 	}
 
 	@Override
-	public Object visit(ASTapplication node, Context context) throws Exception { // TODO
+	public Object visit(ASTconst node, Context context) throws Exception {
+		globalVars = globalVars.extend(node.getName(), node.getExpr().accept(this, context));
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTfun node, Context context) throws Exception {
+		Closure closure = new Closure(node, context);
+		this.globalVars.extend(node.getName(), closure);
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTfunRec node, Context context) throws Exception {
+		Closure closure = new Closure(node, context);
+		this.globalVars.extend(node.getName(), closure);
 		return null;
 	}
 
@@ -55,15 +70,8 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	}
 
 	@Override
-	public Object visit(ASTconst node, Context context) throws Exception {
-		globalVars = globalVars.extend(node.getName(), node.getExpr().accept(this, context));
-		return null;
-	}
-
-	@Override
-	public Object visit(ASTecho node, Context context) throws Exception {
-		System.out.println(node.getExpr().accept(this, context));
-		return null;
+	public Object visit(ASTnum node, Context context) throws Exception {
+		return node.getVal();
 	}
 
 	@Override
@@ -81,13 +89,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	}
 
 	@Override
-	public Object visit(ASTnum node, Context context) throws Exception {
-		return node.getVal();
-	}
-
-	@Override
 	public Object visit(ASToperation node, Context context) throws Exception {
-
 		switch (node.getOperator()) {
 		case ADD:
 			return (int) node.getLeftOperand().accept(this, context)
@@ -121,14 +123,15 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	}
 
 	@Override
-	public Object visit(AbstractFun node, Context context) throws Exception {
-		Closure closure = new Closure(node.getArgs(), (IASTexpression) node.getExpr().accept(this, context));
-		if (node instanceof AbstractNamedFun)
-			this.globalVars.extend(((AbstractNamedFun) node).getName(), closure);
-		else
-			this.globalVars.extend(null, closure);
-		return 1;
+	public Object visit(ASTlambda node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public Object visit(ASTapplication node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

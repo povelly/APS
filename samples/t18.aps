@@ -1,3 +1,4 @@
 [
-echo [ x:int ] 12
+const x int 3;
+echo [ x:int ] (add x 12)
 ]

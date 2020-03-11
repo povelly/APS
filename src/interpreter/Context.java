@@ -43,5 +43,12 @@ public class Context {
 	public Context extend(ASTident variable, Object value) {
 		return new Context(variable, value, this);
 	}
+	
+	@Override
+	public Context clone() {
+		if (this.next == null)
+			return new Context(this.variable, this.value, this.next);
+		return new Context(this.variable, this.value, this.next.clone());
+	}
 
 }

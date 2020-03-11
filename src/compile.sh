@@ -1,6 +1,6 @@
 #!/bin/bash
 JAVA="java"
-MAIN_CLASS="parser/PrologTerm"
+MAIN_CLASS="parser/RunCompiler"
 SAMPLES_DIR="../samples"
 
 if test $# -lt 1

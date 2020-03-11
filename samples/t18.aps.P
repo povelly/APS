@@ -1,1 +1,0 @@
-print(lambda([(x, int)], 12)).
