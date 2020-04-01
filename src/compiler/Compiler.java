@@ -19,8 +19,12 @@ import aps0.ast.Operator;
 import aps0.interfaces.IASTcommand;
 import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTprogram;
-import aps0.interfaces.IASTtype;
 import aps0.interfaces.IASTvisitor;
+import aps1.ast.ASTblock;
+import aps1.ast.ASTifBlock;
+import aps1.ast.ASTset;
+import aps1.ast.ASTvar;
+import aps1.ast.ASTwhile;
 
 public class Compiler implements IASTvisitor<String, Void, Exception> {
 
@@ -46,14 +50,14 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 
 	@Override
 	public String visit(ASTconst node, Void context) throws Exception {
-		return "const(" + node.getName().accept(this, context) + ", " + node.getTypes().accept(this, context) + ", "
+		return "const(" + node.getName().getString() + ", " + node.getTypes().accept(this, context) + ", "
 				+ node.getExpr().accept(this, context) + ")";
 	}
 
 	@Override
 	public String visit(ASTfun node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String fun = "funDef(" + node.getName().accept(this, context) + ", " + node.getTypes().accept(this, context)
+		String fun = "funDef(" + node.getName().getString() + ", " + node.getTypes().accept(this, context)
 				+ ", [";
 		for (int i = 0; i < args.size() - 1; i++)
 			fun += args.get(i).accept(this, context) + ", ";
@@ -64,7 +68,7 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	@Override
 	public String visit(ASTfunRec node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String funRec = "funRecDef(" + node.getName().accept(this, context) + ", "
+		String funRec = "funRecDef(" + node.getName().getString() + ", "
 				+ node.getTypes().accept(this, context) + ", [";
 		for (int i = 0; i < args.size() - 1; i++)
 			funRec += args.get(i).accept(this, context) + ", ";
@@ -74,7 +78,7 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 
 	@Override
 	public String visit(ASTarg node, Void context) throws Exception {
-		return "(" + node.getName().accept(this, context) + ", " + node.getTypes().accept(this, context) + ")";
+		return "(" + node.getName().getString() + ", " + node.getTypes().accept(this, context) + ")";
 	}
 
 	@Override
@@ -127,16 +131,13 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	}
 
 	@Override
-	public String visit(IASTtype node, Void context) throws Exception { // TODO devrait pas exister
-		return null;
-	}
-
-	@Override
 	public String visit(ASTtypes node, Void context) throws Exception {
 		String types = "";
 		ASTtypes currentType = node;
 		while (currentType != null) {
-			types += currentType.getType().accept(this, context);
+			types += currentType.getType().asString();
+//			types += currentType.getType().accept(this, context); TODO
+//			asString à définir dans ASTfunctionType
 			if (currentType.getNext() != null)
 				types += " * ";
 			currentType = currentType.getNext();
@@ -144,4 +145,36 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 		return types;
 	}
 
+	@Override
+	public String visit(ASTblock node, Void context) throws Exception {
+		List<IASTcommand> commands = node.getCommands();
+		String block = "";
+		for (int i = 0; i < commands.size() - 1; i++) {
+			block += commands.get(i).accept(this, context) + ";\n";
+		}
+		block += commands.get(commands.size() - 1).accept(this, context);
+		return block;
+	}
+	
+	@Override
+	public String visit(ASTvar var, Void context) throws Exception {
+		return "var(" + var.getVar().getString() + var.getType().accept(this, context) + ")";
+	}
+
+	@Override
+	public String visit(ASTifBlock node, Void context) throws Exception {
+		return "ifBlock(" + node.getCondition().accept(this, context) + ", " + node.getConsequence().accept(this, context)
+				+ ", " + node.getAlternant().accept(this, context) + ")";
+	}
+
+	@Override
+	public String visit(ASTset node, Void context) throws Exception {
+		return "set(" + node.getVar().getString() + ", " + node.getExpr().accept(this, context) + ")";
+	}
+
+	@Override
+	public String visit(ASTwhile node, Void context) throws Exception {
+		return "while(" + node.getCondition().accept(this, context) + ", " + node.getCorps().accept(this, context) + ")";
+	}
+	
 }

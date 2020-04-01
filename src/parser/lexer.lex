@@ -57,6 +57,13 @@ nls = \n | \r | \r\n
 
 "if" { return Parser.IF; }
 
+"var" { return Parser.VAR; }
+"proc" { return Parser.PROC; }
+"set" { return Parser.SET; }
+"IF" { return Parser.IFBLOCK; }
+"while" { return Parser.WHILE; }
+"call" { return Parser.CALL; }
+
 
 /* newline */
 //{nls} { return 0; }//{ return Parser.NL; }

@@ -33,19 +33,6 @@ public class ASToperation implements IASTexpression {
 		return this.rightOperand;
 	}
 
-//	@Override
-//	public String toPrologString() {
-//		return operator.toString() + "(" + leftOperand.toPrologString() + "," + rightOperand.toPrologString()
-//				+ "])";
-//	}
-	
-	@Override
-	public String toPrologString() {
-		if (operator == Operator.NOT)
-			return operator.getName() + "(" + leftOperand.toPrologString() + ")";
-		return operator.getName() + "(" + leftOperand.toPrologString() + ", " + rightOperand.toPrologString() + ")";
-	}
-	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {

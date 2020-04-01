@@ -15,11 +15,6 @@ public class ASTecho implements IASTstatement {
 	public IASTexpression getExpr() {
 		return this.expr;
 	}
-
-	@Override
-	public String toPrologString() {
-		return "print(" + expr.toPrologString() + ")";
-	}
 	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)

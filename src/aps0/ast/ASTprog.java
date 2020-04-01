@@ -17,22 +17,6 @@ public class ASTprog implements IASTprogram {
 	public List<IASTcommand> getCommands() {
 		return this.commands;
 	}
-
-	@Override
-	public String toPrologString() {
-		String commands = "";
-		for (int i = 0; i < this.commands.size() - 1; i++) {
-			commands += this.commands.get(i).toPrologString() + ";\n";
-		}
-		commands += this.commands.get(this.commands.size() - 1).toPrologString() + ".";
-		return commands;
-	}
-	
-//	@Override
-//	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
-//			throws Err {
-//		return (Result) ((IASTvisitor)visitor).visit(this, env);
-//	}
 	
     @Override
 	public <Result, Env, Err extends Exception> 

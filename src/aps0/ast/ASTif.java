@@ -26,17 +26,6 @@ public class ASTif implements IASTexpression {
 	public IASTexpression getAlternant() {
 		return this.alternant;
 	}
-
-//	@Override
-//	public String toPrologString() {
-//		return "if (" + condition.toPrologString() + ") {\n" + consequence.toPrologString() + "\n} else {\n"
-//				+ alternant.toPrologString() + "\n}";
-//	}
-	
-	@Override
-	public String toPrologString() {
-		return "if(" + condition.toPrologString() + ", " + consequence.toPrologString() + ", " + alternant.toPrologString() + ")";
-	}
 	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)

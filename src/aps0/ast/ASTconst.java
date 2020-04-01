@@ -28,16 +28,6 @@ public class ASTconst implements IASTdeclaration {
 		return this.expr;
 	}
 
-	// @Override
-	// public String toPrologString() {
-	// return "CONST " + name.toPrologString() + ":" + expr.toPrologString();
-	// }
-
-	@Override
-	public String toPrologString() {
-		return "const(" + name.toPrologString() + ", " + types.toPrologString() + ", " + expr.toPrologString() + ")";
-	}
-	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {

@@ -36,25 +36,6 @@ public class ASTfun implements IASTdeclaration {
 		return this.types;
 	}
 
-	// @Override
-	// public String toPrologString() {
-	// String s = "FUN " + types.toPrologString() + " " + name.toPrologString() + "
-	// (";
-	// for (ASTarg arg : args)
-	// s += arg.toPrologString();
-	// s += ") {\n" + expr.toPrologString() + "\n}";
-	// return s;
-	// }
-
-	@Override
-	public String toPrologString() {
-		String s = "funDef(" + name.toPrologString() + ", " + types.toPrologString() + ", [";
-		for (int i = 0; i < args.size() - 1; i++)
-			s += args.get(i).toPrologString() + ", ";
-		s += args.get(args.size() - 1).toPrologString() + "], " + expr.toPrologString() + ")";
-		return s;
-	}
-
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {

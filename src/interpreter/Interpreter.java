@@ -15,8 +15,12 @@ import aps0.ast.ASToperation;
 import aps0.ast.ASTtypes;
 import aps0.interfaces.IASTcommand;
 import aps0.interfaces.IASTprogram;
-import aps0.interfaces.IASTtype;
 import aps0.interfaces.IASTvisitor;
+import aps1.ast.ASTblock;
+import aps1.ast.ASTifBlock;
+import aps1.ast.ASTset;
+import aps1.ast.ASTvar;
+import aps1.ast.ASTwhile;
 
 public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
@@ -135,13 +139,37 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	}
 
 	@Override
-	public Object visit(IASTtype node, Context context) throws Exception {
+	public Object visit(ASTtypes node, Context context) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(ASTtypes node, Context context) throws Exception {
+	public Object visit(ASTblock node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Object visit(ASTvar var, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTifBlock node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTset node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTwhile node, Context context) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

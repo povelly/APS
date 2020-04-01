@@ -2,9 +2,10 @@ package aps0.ast;
 
 import aps0.interfaces.IASTnode;
 import aps0.interfaces.IASTtype;
+import aps0.interfaces.IASTvisitable;
 import aps0.interfaces.IASTvisitor;
 
-public class ASTtypes implements IASTnode {
+public class ASTtypes implements IASTnode, IASTvisitable {
 	
 	private final IASTtype type;
 	private final ASTtypes next;
@@ -25,19 +26,6 @@ public class ASTtypes implements IASTnode {
 	
 	public ASTtypes getNext() {
 		return this.next;
-	}
-
-	//@Override
-	public String toPrologString() {
-		String types = "";
-		ASTtypes currentType = this;
-		while (currentType != null) {
-			types += currentType.getType().toPrologString();
-			if (currentType.getNext() != null)
-				types += " * ";
-			currentType = currentType.getNext();
-		}
-		return types;
 	}
 
 	@Override

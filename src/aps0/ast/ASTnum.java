@@ -15,16 +15,6 @@ public class ASTnum implements IASTexpression {
 		return this.val;
 	}
 
-//	@Override
-//	public String toPrologString() {
-//		return ("num(" + val + ")");
-//	}
-	
-	@Override
-	public String toPrologString() {
-		return val.toString();
-	}
-	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {

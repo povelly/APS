@@ -16,11 +16,6 @@ public class ASTboolean implements IASTexpression{
 	}
 	
 	@Override
-	public String toPrologString() {
-		return ((Boolean) value).toString();
-	}
-	
-	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {
 		return visitor.visit(this, env);

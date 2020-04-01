@@ -22,15 +22,6 @@ public class ASTapplication implements IASTexpression {
 	public ArrayList<IASTexpression> getExprs() {
 		return this.exprs;
 	}
-
-	@Override
-	public String toPrologString() {
-		String s = "application(" + expr.toPrologString() + ", (";
-		for (int i = 0; i < exprs.size() - 1; i++)
-			s += exprs.get(i).toPrologString() + ", ";
-		s += exprs.get(exprs.size() - 1).toPrologString() + "))";
-		return s;
-	}
 	
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)

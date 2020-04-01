@@ -4,18 +4,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-import aps0.interfaces.IASTnode;
+import aps0.interfaces.IASTprogram;
 import compiler.Compiler;
 
 public class RunCompiler {
 
 	public static void main(String args[]) throws Exception {
 		Parser yyparser;
-		IASTnode prog;
+		IASTprogram prog;
 		try {
 			yyparser = new Parser(new InputStreamReader(new FileInputStream(args[0])));
 			yyparser.yyparse();
-			prog = (IASTnode) yyparser.yyval.obj;
+			prog = (IASTprogram) yyparser.yyval.obj;
 
 			if (prog != null) {
 				//System.out.println(prog.toPrologString());
