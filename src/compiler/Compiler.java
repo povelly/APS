@@ -148,17 +148,17 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	@Override
 	public String visit(ASTblock node, Void context) throws Exception {
 		List<IASTcommand> commands = node.getCommands();
-		String block = "";
+		String block = "block(";
 		for (int i = 0; i < commands.size() - 1; i++) {
-			block += commands.get(i).accept(this, context) + ";\n";
+			block += commands.get(i).accept(this, context) + "; ";
 		}
-		block += commands.get(commands.size() - 1).accept(this, context);
+		block += commands.get(commands.size() - 1).accept(this, context) + ")";
 		return block;
 	}
 	
 	@Override
 	public String visit(ASTvar var, Void context) throws Exception {
-		return "var(" + var.getVar().getString() + var.getType().accept(this, context) + ")";
+		return "var(" + var.getVar().getString() + ", " + var.getType().accept(this, context) + ")";
 	}
 
 	@Override

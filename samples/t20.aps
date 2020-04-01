@@ -1,0 +1,6 @@
+[
+  var x int;
+  set x 42;
+  IF true [ echo 1; echo 2 ] [ echo 3 ];
+  while true [ echo 123 ]
+]

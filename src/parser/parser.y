@@ -5,6 +5,7 @@
   import java.util.Arrays;
   import aps0.ast.*;
   import aps0.interfaces.*;
+  import aps1.ast.*;
 %}
 
 %token NL /* newline */
@@ -33,6 +34,7 @@
 %type <obj> args
 %type <obj> type
 %type <obj> types
+%type <obj> block
 %type <obj> dec
 %type <obj> expr
 %type <obj> exprs
@@ -96,7 +98,7 @@ block: LBRA cmds RBRA { $$ = new ASTblock((List<IASTcommand>)$2); }
 dec: CONST IDENT type expr { $$ = new ASTconst(new ASTident($2), new ASTtypes((IASTtype)$3), (IASTexpression)$4); }
 | FUN IDENT type LBRA args RBRA expr { $$ = new ASTfun(new ASTident($2), new ASTtypes((IASTtype)$3), (ArrayList<ASTarg>)$5, (IASTexpression)$7); }
 | FUN REC IDENT type LBRA args RBRA expr {$$ = new ASTfunRec(new ASTident($3), new ASTtypes((IASTtype)$4), (ArrayList<ASTarg>)$6, (IASTexpression) $8 ); }
-| VAR IDENT type { $$ = new ASTvar(new ASTident($3), new ASTtypes((IASTtype)$4)); }
+| VAR IDENT type { $$ = new ASTvar(new ASTident($2), new ASTtypes((IASTtype)$3)); }
 ;
 
 expr:
