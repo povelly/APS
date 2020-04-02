@@ -30,6 +30,10 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	public Interpreter(Context context) {
 		this.globalVars = context;
 	}
+	
+	public Context getGlobalVars() {
+		return this.globalVars;
+	}
 
 	@Override
 	public Object visit(IASTprogram node, Context context) throws Exception {
@@ -167,7 +171,8 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTset node, Context context) throws Exception {
-		context.setValue(node.getVar(), node.getValue().accept(this, context));
+		if (context.contains(node.getVar()))
+			context.setValue(node.getVar(), node.getValue().accept(this, context));
 		return null;
 	}
 

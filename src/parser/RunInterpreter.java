@@ -21,7 +21,8 @@ public class RunInterpreter {
 
 			if (prog != null) {
 				Interpreter interpreter = new Interpreter(new Context(new ASTident("vglobale1"), null, null));
-				prog.accept(interpreter, new Context(new ASTident("v1"), null, null)); // TODO changer context
+//				prog.accept(interpreter, new Context(new ASTident("v1"), null, null)); // TODO changer context
+				prog.accept(interpreter, interpreter.getGlobalVars()); // TODO changer context
 			}
 			else
 				System.out.println("Null");
