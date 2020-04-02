@@ -33,11 +33,11 @@ public class Context {
 		return this.next.getValue(variable);
 	}
 
-	public void changeValue(ASTident variable, Object value) { // TODO replace check null par exception
+	public void setValue(ASTident variable, Object value) { // TODO replace check null par exception
 		if (this.variable.getString().equals(variable.getString()))
 			this.value = value;
 		if (this.next != null)
-			this.next.changeValue(variable, value);
+			this.next.setValue(variable, value);
 	}
 
 	public Context extend(ASTident variable, Object value) {

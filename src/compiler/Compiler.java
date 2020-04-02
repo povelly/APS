@@ -169,7 +169,7 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 
 	@Override
 	public String visit(ASTset node, Void context) throws Exception {
-		return "set(" + node.getVar().getString() + ", " + node.getExpr().accept(this, context) + ")";
+		return "set(" + node.getVar().getString() + ", " + node.getValue().accept(this, context) + ")";
 	}
 
 	@Override

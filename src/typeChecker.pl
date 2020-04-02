@@ -4,20 +4,24 @@ typeCheck(T, R),
 print(R),
 nl,
 exitCode(R).
+/*Fonction qui permet de recup le type des arguments*/
+typeArgs([],[]).
+typeArgs([(_,Type)|Rest],[Type | Result]):- 
+        typeArgs(Rest,Result).
 
 typeCheck(P, ok) :- typeProgram(P).
 
 typeProgram(prog(Cmds)):-
-        context_init(Context0),
-        typeCommands(Context0, Cmds, void), !.
+        context_init(Context1),
+        typeCommands(Context1, Cmds, void), !.
         
 typeCheck(_, ko).
 
 typeCommands(Context, [Stat|Cmds], void):-
-        typeStatement(Context, Stat, void),
+        typeStat(Context, Stat, void),
         typeCommands(Context, Cmds, void).
 typeCommands(Context, [Dec|Cmds], void):-
-        typeDeclaration(Context, Dec, New_Context),
+        typeDec(Context, Dec, New_Context),
         typeCommands(New_Context, Cmds, void).
 typeCommands(_, [], void).
     
@@ -28,8 +32,8 @@ typeCommand(CMDS) :- typeDec(DEC).*/
 
 typeStat(G, echo(E), void) :- typeExpr(G, E, int),!.
 typeDec(G1, const(V, T, E), G2) :- typeExpr(G1, E, T), addEnv(G1, [var(V, T, E)], G2). /*Attention au var*/
-typeDec(G1, funDef(V, T, Args, E), G3) :- addEnv(G1, Args, G2), typeExpr(G2, E, T), addEnv(G2, V, G3).
-typeDec(G1, funRecDef(V, T, Args, E), G4) :- addEnv(G1, Args, G2), addEnv(G2, V, G3) typeExpr(G3, E, T), addEnv(G3, V, G4).
+typeDec(G1, funDef(V, T, Args, E), G3) :- addEnv(G1, Args, G2), typeExpr(G2, E, T),typeArgs(Args,TypeArgs), addEnv(G2, [(V,(TypeArgs,Type))], G3).
+typeDec(G1, funRecDef(V, T, Args, E), G4) :- typeArgs(Args,TypeArgs),addEnv(G1, [(V,(TypeArgs, T)) | Args], G2), addEnv(G2, V, G3) typeExpr(G3, E, T), addEnv(G3, [(V,(TypeArgs,T))], G4).
 
 typeExpr(_, true, bool).
 typeExpr(_, false, bool).

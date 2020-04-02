@@ -14,6 +14,7 @@ import aps0.ast.ASTnum;
 import aps0.ast.ASToperation;
 import aps0.ast.ASTtypes;
 import aps0.interfaces.IASTcommand;
+import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTprogram;
 import aps0.interfaces.IASTvisitor;
 import aps1.ast.ASTblock;
@@ -146,32 +147,70 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTblock node, Context context) throws Exception {
-		// TODO Auto-generated method stub
+		for (IASTcommand command : node.getCommands())
+			command.accept(this, context);
 		return null;
 	}
-	
+
 	@Override
 	public Object visit(ASTvar var, Context context) throws Exception {
-		// TODO Auto-generated method stub
+		context.extend(var.getVar(), null);
 		return null;
 	}
 
 	@Override
 	public Object visit(ASTifBlock node, Context context) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if ((boolean) node.getCondition().accept(this, context))
+			return node.getConsequence().accept(this, context);
+		return node.getAlternant().accept(this, context);
 	}
 
 	@Override
 	public Object visit(ASTset node, Context context) throws Exception {
-		// TODO Auto-generated method stub
+		context.setValue(node.getVar(), node.getValue().accept(this, context));
 		return null;
 	}
 
 	@Override
 	public Object visit(ASTwhile node, Context context) throws Exception {
-		// TODO Auto-generated method stub
+		while (this.evaluateAsBool(node.getCondition(), context)) {
+			node.getCorps().accept(this, context);
+		}
 		return null;
+	}
+
+	public boolean evaluateAsBool(IASTexpression expr, Context context) {
+		if (expr instanceof ASTnum)
+			return ((ASTnum) expr).getVal() == 0 ? false : true;
+		if (expr instanceof ASTboolean)
+			return ((ASTboolean) expr).getValue() ? true : false;
+		if (expr instanceof ASTident)
+			return ((ASTident) expr).getString().equals("") ? false : true;
+		if (expr instanceof ASTif)
+			try {
+				return this.evaluateAsBool((IASTexpression) ((ASTif) expr).accept(this, context), context);
+			} catch (Exception e1) {
+				return false;
+			}
+		if (expr instanceof ASToperation)
+			try {
+				return this.evaluateAsBool((IASTexpression) ((ASToperation) expr).accept(this, context), context);
+			} catch (Exception e) {
+				return false;
+			}
+		if (expr instanceof ASTlambda)
+			try {
+				return this.evaluateAsBool((IASTexpression) ((ASTlambda) expr).accept(this, context), context);
+			} catch (Exception e) {
+				return false;
+			}
+		if (expr instanceof ASTapplication)
+			try {
+				return this.evaluateAsBool((IASTexpression) ((ASTlambda) expr).accept(this, context), context);
+			} catch (Exception e) {
+				return false;
+			}
+		return false;
 	}
 
 }

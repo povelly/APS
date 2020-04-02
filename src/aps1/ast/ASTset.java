@@ -8,19 +8,19 @@ import aps0.interfaces.IASTvisitor;
 public class ASTset implements IASTstatement {
 	
 	private final ASTident var;
-	private final IASTexpression expr;
+	private final IASTexpression value;
 	
-	public ASTset(ASTident var, IASTexpression expr) {
+	public ASTset(ASTident var, IASTexpression value) {
 		this.var = var;
-		this.expr = expr;
+		this.value = value;
 	}
 	
 	public ASTident getVar() {
 		return this.var;
 	}
 	
-	public IASTexpression getExpr() {
-		return this.expr;
+	public IASTexpression getValue() {
+		return this.value;
 	}
 
 	@Override
