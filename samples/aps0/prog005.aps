@@ -1,0 +1,5 @@
+[
+  CONST x int 7;
+  CONST x int (mul x 3);
+  ECHO (mul x 2)
+]

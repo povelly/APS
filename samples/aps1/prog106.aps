@@ -1,0 +1,8 @@
+[
+  VAR x int;
+  VAR y int;
+  IF (eq x 42)
+    [ ECHO x ]
+    [ SET y 42 ];
+  ECHO y
+]

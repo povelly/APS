@@ -1,8 +1,8 @@
 [
-const x int 3;
-const y int 4;
-const z int 5;
-echo (mul (add x 42) (sub 3 (div y z)))
+  CONST x int 3;
+  CONST y int 4;
+  CONST z int 5;
+  ECHO (mul (add x 42) (sub 3 (div y z)))
 ]
 
 

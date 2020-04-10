@@ -1,0 +1,5 @@
+[
+  CONST x int 7;
+  CONST y int (mul x 3);
+  ECHO (mul y 2)
+]

@@ -1,0 +1,12 @@
+[
+  VAR x int;
+  VAR b bool;
+  SET x 0;
+  SET b false;
+  WHILE (not b) [
+    IF (eq x 42)
+      [ SET b true ]
+      [ SET x (add x 1) ]
+  ];
+  ECHO x
+]

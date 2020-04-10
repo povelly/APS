@@ -1,0 +1,5 @@
+[
+  CONST a int 5;
+  FUN f int [x:int] (add x a);
+  ECHO (f 37)
+]

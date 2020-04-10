@@ -1,0 +1,15 @@
+[
+  VAR r int;
+  FUN le bool [x:int,y:int] (or (eq x y) (lt x y));
+  PROC REC loop [f: (int -> int), n:int]
+    [
+      IF (le n 0)
+        [ ECHO r ]
+	[
+	  SET r (f r);
+	  CALL loop f (sub n 1)
+	]
+    ];
+  SET r 21;
+  CALL loop [x:int](add x 1) 21
+]

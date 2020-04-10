@@ -1,0 +1,6 @@
+[
+  CONST x int 0;
+  IF (eq x 42)
+    [ ECHO x ]
+    [ ECHO 42 ]
+]

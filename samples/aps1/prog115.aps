@@ -1,0 +1,9 @@
+[
+  VAR x int;
+  PROC incr [n:int]
+    [ SET x (add x n) ];
+  SET x 41;
+  ECHO x;
+  CALL incr 1;
+  ECHO x
+]

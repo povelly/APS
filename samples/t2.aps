@@ -1,6 +1,6 @@
 [
-const x int 3;
-echo x
+  CONST x int 3;
+  ECHO x
 ]
 
 

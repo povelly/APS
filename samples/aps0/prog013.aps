@@ -1,0 +1,4 @@
+[
+  FUN REC f int [x:int] (if (lt x 42) (f (add x 1)) (if (lt 42 x) (f (sub x 1)) x));
+  ECHO (f 53)
+]

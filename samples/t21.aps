@@ -1,4 +1,4 @@
 [
-	const x int 1;
-	echo x
+  CONST x int 1;
+  ECHO x
 ]

@@ -1,4 +1,4 @@
 [
-const x int 3;
-echo (add (sub x 2) 6)
+  CONST x int 3;
+  ECHO (add (sub x 2) 6)
 ]

@@ -1,0 +1,3 @@
+[
+  ECHO ([f:(int->int)](f 37) [x:int](add x 5))
+]

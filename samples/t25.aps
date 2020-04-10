@@ -1,4 +1,4 @@
 [
   fun f int [ x:int ] (add x 1);
-  echo 1
+  ECHO 1
 ]

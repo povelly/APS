@@ -1,0 +1,16 @@
+[
+  VAR x int;
+  SET x 0;
+  PROC p [n:int]
+    [
+      VAR y int;
+      SET y (mul n 2);
+      SET x y
+    ];
+  ECHO x;
+  IF true
+    [ CALL p 21 ]
+    [ ECHO x ];
+  ECHO x
+
+]

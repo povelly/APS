@@ -1,4 +1,4 @@
 [
-echo 42;
-echo 43
+  ECHO 42;
+  ECHO 43
 ]

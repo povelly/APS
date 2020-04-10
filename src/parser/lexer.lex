@@ -26,12 +26,12 @@ nls = \n | \r | \r\n
 "->" { return Parser.ARROW; }
 
 /* declarations */
-"const" { return Parser.CONST; }
-"fun" { return Parser.FUN; }
-"rec" { return Parser.REC; }
+"CONST" { return Parser.CONST; }
+"FUN" { return Parser.FUN; }
+"REC" { return Parser.REC; }
 
 /* statements */
-"echo" { return Parser.ECHO; }
+"ECHO" { return Parser.ECHO; }
 
 /* primitive types */
 "bool" { return Parser.BOOLEAN; }
@@ -57,12 +57,12 @@ nls = \n | \r | \r\n
 
 "if" { return Parser.IF; }
 
-"var" { return Parser.VAR; }
-"proc" { return Parser.PROC; }
-"set" { return Parser.SET; }
+"VAR" { return Parser.VAR; }
+"PROC" { return Parser.PROC; }
+"SET" { return Parser.SET; }
 "IF" { return Parser.IFBLOCK; }
-"while" { return Parser.WHILE; }
-"call" { return Parser.CALL; }
+"WHILE" { return Parser.WHILE; }
+"CALL" { return Parser.CALL; }
 
 
 /* newline */
