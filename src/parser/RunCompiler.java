@@ -18,8 +18,6 @@ public class RunCompiler {
 			prog = (IASTprogram) yyparser.yyval.obj;
 
 			if (prog != null) {
-				//System.out.println(prog.toPrologString());
-				
 				Compiler compiler = new Compiler();
 				System.out.println(prog.accept(compiler, null));
 			}

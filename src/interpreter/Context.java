@@ -4,7 +4,7 @@ import aps0.ast.ASTident;
 
 public class Context {
 
-	private ASTident variable;
+	public ASTident variable;
 	private Object value;
 	private Context next;
 
@@ -30,18 +30,24 @@ public class Context {
 	public Object getValue(ASTident variable) {
 		if (this.variable.getString().equals(variable.getString()))
 			return this.value;
+		if (this.next == null)
+			return null;
 		return this.next.getValue(variable);
 	}
 
-	public void setValue(ASTident variable, Object value) { // TODO replace check null par exception
+	public void setValue(ASTident variable, Object value) {
 		if (this.variable.getString().equals(variable.getString()))
 			this.value = value;
 		if (this.next != null)
 			this.next.setValue(variable, value);
 	}
 
-	public Context extend(ASTident variable, Object value) {
-		return new Context(variable, value, this);
+	public void extend(ASTident variable, Object value) {
+		Context ctx = this;
+		while (ctx.next != null) {
+			ctx = ctx.next;
+		}
+		ctx.next = new Context(variable, value, null);
 	}
 	
 	@Override

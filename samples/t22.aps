@@ -1,0 +1,7 @@
+[
+	var x int;
+	set x 1;
+	echo x;
+	set x 3;
+	echo x
+]

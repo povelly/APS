@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import aps0.interfaces.IASTdeclaration;
 import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTvisitor;
+import aps0.interfaces.IFun;
 
-public class ASTfun implements IASTdeclaration {
+public class ASTfun implements IASTdeclaration, IFun {
 
 	protected final ArrayList<ASTarg> args;
 	protected final IASTexpression expr;

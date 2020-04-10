@@ -30,15 +30,11 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	public Interpreter(Context context) {
 		this.globalVars = context;
 	}
-	
-	public Context getGlobalVars() {
-		return this.globalVars;
-	}
 
 	@Override
 	public Object visit(IASTprogram node, Context context) throws Exception {
 		for (IASTcommand command : node.getCommands())
-			command.accept(this, context);
+			command.accept(this, this.globalVars);
 		return null;
 	}
 
@@ -50,21 +46,25 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTconst node, Context context) throws Exception {
-		globalVars = globalVars.extend(node.getName(), node.getExpr().accept(this, context));
+		globalVars.extend(node.getName(), node.getExpr().accept(this, context));
 		return null;
 	}
 
 	@Override
 	public Object visit(ASTfun node, Context context) throws Exception {
-		Closure closure = new Closure(node, context);
-		this.globalVars.extend(node.getName(), closure);
+		// TODO add parameter
+		Context context2 = context.clone();
+		Closure closure = new Closure(node, context2);
+		context.extend(node.getName(), closure);
 		return null;
 	}
 
 	@Override
 	public Object visit(ASTfunRec node, Context context) throws Exception {
-		Closure closure = new Closure(node, context);
-		this.globalVars.extend(node.getName(), closure);
+		Context context2 = context.clone();
+		context2.extend(node.getName(), node);
+		Closure closure = new Closure(node, context2);
+		context.extend(node.getName(), closure);
 		return null;
 	}
 
@@ -85,8 +85,18 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTident node, Context context) throws Exception {
-		if (context.contains(node))
-			return context.getValue(node);
+		// TODO pas la bonne methode pour ce qui est fonction, faut appeler les args etc
+		// -> autre type à visiter
+		if (context.contains(node)) {
+			Object value = context.getValue(node);
+			if (value == null)
+				return null;
+			if (value instanceof Closure) {
+				Closure closure = (Closure) value;
+				return closure.getFun().accept(this, closure.getLexenv());
+			}
+			return value;
+		}
 		return globalVars.getValue(node);
 	}
 
@@ -151,8 +161,9 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTblock node, Context context) throws Exception {
+		Context local_context = context.clone();
 		for (IASTcommand command : node.getCommands())
-			command.accept(this, context);
+			command.accept(this, local_context);
 		return null;
 	}
 
@@ -194,7 +205,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 		if (expr instanceof ASTif)
 			try {
 				return this.evaluateAsBool((IASTexpression) ((ASTif) expr).accept(this, context), context);
-			} catch (Exception e1) {
+			} catch (Exception e) {
 				return false;
 			}
 		if (expr instanceof ASToperation)

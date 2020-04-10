@@ -1,48 +1,23 @@
 package interpreter;
 
-import java.util.List;
-
-import aps0.ast.ASTarg;
-import aps0.ast.ASTfun;
-import aps0.ast.ASTfunRec;
-import aps0.ast.ASTlambda;
-import aps0.interfaces.IASTexpression;
+import aps0.interfaces.IFun;
 
 public class Closure {
 
-	private final List<ASTarg> arguments;
-	private final IASTexpression expression;
+	private final IFun fun;
 	private final Context lexenv;
 
-	public Closure(ASTlambda lambda, Context lexenv) {
-		this.arguments = lambda.getArgs();
-		this.expression = lambda.getExpr();
-		this.lexenv = lexenv.clone();
-	}
-
-	public Closure(ASTfun fun, Context lexenv) {
-		this.arguments = fun.getArgs();
-		this.expression = fun.getExpr();
-		this.lexenv = lexenv.clone();
-	}
-
-	public Closure(ASTfunRec funRec, Context lexenv) {
-		this.arguments = funRec.getArgs();
-		this.expression = funRec.getExpr();
-		this.lexenv = lexenv.clone();
-		this.lexenv.extend(funRec.getName(), funRec);
-	}
-
-	public List<ASTarg> getArguments() {
-		return this.arguments;
-	}
-
-	public IASTexpression getExpression() {
-		return this.expression;
+	public Closure(IFun fun, Context lexenv) {
+		this.fun = fun;
+		this.lexenv = lexenv;
 	}
 
 	public Context getLexenv() {
 		return this.lexenv;
+	}
+
+	public IFun getFun() {
+		return this.fun;
 	}
 
 }

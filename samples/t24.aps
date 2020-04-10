@@ -1,0 +1,6 @@
+[
+  var x int;
+  set x 0;
+  IF true [ set x 1; echo x; set x 2; echo x ] [ echo 5 ];
+  echo x
+]

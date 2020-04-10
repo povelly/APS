@@ -20,9 +20,8 @@ public class RunInterpreter {
 			prog = (IASTprogram) yyparser.yyval.obj;
 
 			if (prog != null) {
-				Interpreter interpreter = new Interpreter(new Context(new ASTident("vglobale1"), null, null));
-//				prog.accept(interpreter, new Context(new ASTident("v1"), null, null)); // TODO changer context
-				prog.accept(interpreter, interpreter.getGlobalVars()); // TODO changer context
+				Interpreter interpreter = new Interpreter(new Context(new ASTident("vglobale1"), 7, null));
+				prog.accept(interpreter, null);
 			}
 			else
 				System.out.println("Null");
@@ -30,24 +29,5 @@ public class RunInterpreter {
 			System.out.println("\nImpossible de lire le/les fichier(s)\n" + e.getMessage() + "\n");
 		}
 	}
-
-//	public static void main(String args[]) throws Exception {
-//		Parser yyparser;
-//		IASTnode prog;
-//		try {
-//			yyparser = new Parser(new InputStreamReader(new FileInputStream(args[0])));
-//			yyparser.yyparse();
-//			prog = (IASTnode) yyparser.yyval.obj;
-//
-//			if (prog != null) {
-//				Interpreter interpreter = new Interpreter(new Context(new ASTident("vglobale1"), null, null));
-//				prog.accept(interpreter, new Context(new ASTident("v1"), null, null)); // TODO changer context
-//			}
-//			else
-//				System.out.println("Null");
-//		} catch (FileNotFoundException e) {
-//			System.out.println("\nImpossible de lire le/les fichier(s)\n" + e.getMessage() + "\n");
-//		}
-//	}
 
 }

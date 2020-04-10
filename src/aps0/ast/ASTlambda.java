@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTvisitor;
+import aps0.interfaces.IFun;
 
-public class ASTlambda implements IASTexpression {
+public class ASTlambda implements IASTexpression, IFun {
 
 	protected final ArrayList<ASTarg> args;
 	protected final IASTexpression expr;
