@@ -25,6 +25,7 @@ import aps1.ast.ASTifBlock;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
+import interpreter.Closure;
 
 public class Compiler implements IASTvisitor<String, Void, Exception> {
 
@@ -121,13 +122,19 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	}
 
 	@Override
-	public String visit(ASTapplication node, Void context) throws Exception {
+	public String visit(ASTapplication node, Void context) throws Exception { // TODO à virer
 		List<IASTexpression> exprs = node.getExprs();
 		String s = "application(" + node.getExpr().accept(this, context) + ", (";
 		for (int i = 0; i < exprs.size() - 1; i++)
 			s += exprs.get(i).accept(this, context) + ", ";
 		s += exprs.get(exprs.size() - 1).accept(this, context) + "))";
 		return s;
+	}
+	
+	@Override
+	public String visit(Closure node, Void context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

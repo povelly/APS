@@ -152,6 +152,12 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Object visit(Closure node, Context context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public Object visit(ASTtypes node, Context context) throws Exception {
@@ -228,5 +234,5 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 			}
 		return false;
 	}
-
+	
 }
