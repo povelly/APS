@@ -2,9 +2,9 @@ package compiler;
 
 import java.util.List;
 
-import aps0.ast.ASTapplication;
 import aps0.ast.ASTarg;
 import aps0.ast.ASTboolean;
+import aps0.ast.ASTclosure;
 import aps0.ast.ASTconst;
 import aps0.ast.ASTecho;
 import aps0.ast.ASTfun;
@@ -25,7 +25,6 @@ import aps1.ast.ASTifBlock;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
-import interpreter.Closure;
 
 public class Compiler implements IASTvisitor<String, Void, Exception> {
 
@@ -120,21 +119,15 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 		lambda += args.get(args.size() - 1).accept(this, context) + "], " + node.getExpr().accept(this, context) + ")";
 		return lambda;
 	}
-
+	
 	@Override
-	public String visit(ASTapplication node, Void context) throws Exception { // TODO à virer
-		List<IASTexpression> exprs = node.getExprs();
+	public String visit(ASTclosure node, Void context) throws Exception {
+		List<IASTexpression> exprs = node.getArguments();
 		String s = "application(" + node.getExpr().accept(this, context) + ", (";
 		for (int i = 0; i < exprs.size() - 1; i++)
 			s += exprs.get(i).accept(this, context) + ", ";
 		s += exprs.get(exprs.size() - 1).accept(this, context) + "))";
 		return s;
-	}
-	
-	@Override
-	public String visit(Closure node, Void context) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

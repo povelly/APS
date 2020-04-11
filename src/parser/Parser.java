@@ -704,7 +704,7 @@ case 37:
 break;
 case 38:
 //#line 120 "parser.y"
- { yyval.obj = new ASTapplication((IASTexpression)val_peek(2).obj, (ArrayList<IASTexpression>)val_peek(1).obj); }
+ { yyval.obj = new ASTclosure((IASTexpression)val_peek(2).obj, (ArrayList<IASTexpression>)val_peek(1).obj); }
 break;
 case 39:
 //#line 133 "parser.y"

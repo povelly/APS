@@ -1,28 +1,28 @@
 package aps0.ast;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTvisitor;
 
-public class ASTapplication implements IASTexpression {
-
+public class ASTclosure implements IASTexpression {
+	
 	private final IASTexpression expr;
-	private final ArrayList<IASTexpression> exprs;
-
-	public ASTapplication(IASTexpression expr, ArrayList<IASTexpression> exprs) {
+	private final List<IASTexpression> arguments;
+	
+	public ASTclosure(IASTexpression expr, List<IASTexpression> arguments) {
 		this.expr = expr;
-		this.exprs = exprs;
+		this.arguments = arguments;
 	}
 
 	public IASTexpression getExpr() {
 		return this.expr;
 	}
-
-	public ArrayList<IASTexpression> getExprs() {
-		return this.exprs;
-	}
 	
+	public List<IASTexpression> getArguments() {
+		return this.arguments;
+	}
+
 	@Override
 	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
 			throws Err {

@@ -1,8 +1,8 @@
 package aps0.interfaces;
 
-import aps0.ast.ASTapplication;
 import aps0.ast.ASTarg;
 import aps0.ast.ASTboolean;
+import aps0.ast.ASTclosure;
 import aps0.ast.ASTconst;
 import aps0.ast.ASTecho;
 import aps0.ast.ASTfun;
@@ -18,7 +18,6 @@ import aps1.ast.ASTifBlock;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
-import interpreter.Closure;
 
 public interface IASTvisitor<Result, Env, Err extends Exception> {
 	
@@ -48,8 +47,7 @@ public interface IASTvisitor<Result, Env, Err extends Exception> {
 	public Result visit(ASTif node, Env context) throws Err;
 	public Result visit(ASToperation node, Env context) throws Err;
 	public Result visit(ASTlambda node, Env context) throws Err;
-	public Result visit(ASTapplication node, Env context) throws Err; // TODO a supprimer
-	public Result visit(Closure node, Env context) throws Err;
+	public Result visit(ASTclosure node, Env context) throws Err;
 	
 	// OTHER NODES
 //	public Result visit(IASTtype node, Env context) throws Err;

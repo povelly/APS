@@ -14,18 +14,36 @@ rm $SAMPLES_DIR/*.pl
 
 if [[ "$1" == all ]]
 then
-	echo "Running all tests"
-	for arg in $SAMPLES_DIR/*.aps
-	do
-	  echo -e "\n$arg :"
-	  $JAVA $MAIN_CLASS $arg
-	  $JAVA $MAIN_CLASS $arg > "$arg.pl"
-	done
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+      $JAVA $MAIN_CLASS $arg > "$arg.pl"
+    done
+elif [[ "$1" == aps0 ]]
+then
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/aps0/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+      $JAVA $MAIN_CLASS $arg > "$arg.pl"
+    done
+elif [[ "$1" == aps1 ]]
+then
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/aps1/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+      $JAVA $MAIN_CLASS $arg > "$arg.pl"
+    done
 else
-	for arg in $*
-	do
-	  echo -e "\n$arg :"
-		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
-		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg > "$SAMPLES_DIR/$arg.pl"
-	done
+    for arg in $*
+    do
+      echo -e "\n$arg :"
+        $JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
+        $JAVA $MAIN_CLASS $SAMPLES_DIR/$arg > "$SAMPLES_DIR/$arg.pl"
+    done
 fi

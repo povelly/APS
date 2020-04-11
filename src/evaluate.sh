@@ -12,16 +12,32 @@ fi
 
 if [[ "$1" == all ]]
 then
-	echo "Running all tests"
-	for arg in $SAMPLES_DIR/*.aps
-	do
-	  echo -e "\n$arg :"
-	  $JAVA $MAIN_CLASS $arg
-	done
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+    done
+elif [[ "$1" == aps0 ]]
+then
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/aps0/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+    done
+elif [[ "$1" == aps1 ]]
+then
+    echo "Running all tests"
+    for arg in $SAMPLES_DIR/aps1/*.aps
+    do
+      echo -e "\n$arg :"
+      $JAVA $MAIN_CLASS $arg
+    done
 else
-	for arg in $*
-	do
-	  echo -e "\n$arg :"
-		$JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
-	done
+    for arg in $*
+    do
+      echo -e "\n$arg :"
+        $JAVA $MAIN_CLASS $SAMPLES_DIR/$arg
+    done
 fi

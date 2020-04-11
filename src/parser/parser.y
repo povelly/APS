@@ -117,7 +117,7 @@ NUM { $$ = new ASTnum($1); }
 | LPAR EQ expr expr RPAR { $$ = new ASToperation(Operator.EQ, (IASTexpression)$3, (IASTexpression)$4); }
 | LPAR LT expr expr RPAR { $$ = new ASToperation(Operator.LT, (IASTexpression)$3, (IASTexpression)$4); }
 | LBRA args RBRA expr { $$ = new ASTlambda((ArrayList<ASTarg>) $2, (IASTexpression) $4);}
-| LPAR expr exprs RPAR = { $$ = new ASTapplication((IASTexpression)$2, (ArrayList<IASTexpression>)$3); }
+| LPAR expr exprs RPAR = { $$ = new ASTclosure((IASTexpression)$2, (ArrayList<IASTexpression>)$3); }
 ;
 
 /*

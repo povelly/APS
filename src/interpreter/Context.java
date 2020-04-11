@@ -45,6 +45,10 @@ public class Context {
 	public void extend(ASTident variable, Object value) {
 		Context ctx = this;
 		while (ctx.next != null) {
+			if (ctx.variable.getString().equals(variable.getString())) {
+				ctx.value = value;
+				return;
+			}
 			ctx = ctx.next;
 		}
 		ctx.next = new Context(variable, value, null);

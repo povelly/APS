@@ -51,8 +51,8 @@ nls = \n | \r | \r\n
 "or" { return Parser.OR; }
 "not" { return Parser.NOT; }
 
-"=" { return Parser.EQ; }
-"<" { return Parser.LT; }
+"eq" { return Parser.EQ; }
+"lt" { return Parser.LT; }
 
 
 "if" { return Parser.IF; }
