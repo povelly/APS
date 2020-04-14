@@ -22,8 +22,9 @@ public class ASTfunctionType implements IASTtype {
 
 	@Override
 	public String asString() {
-		// TODO Auto-generated method stub
-		return null;
+		String types = this.argumentTypes.toString();
+		types += " -> " + this.returnType.asString();
+		return types;
 	}
 
 }

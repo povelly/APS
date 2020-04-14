@@ -48,7 +48,7 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 
 	@Override
 	public String visit(ASTecho node, Void context) throws Exception {
-		return node.getExpr().accept(this, context);
+		return "echo(" + node.getExpr().accept(this, context) + ")";
 	}
 
 	@Override
@@ -183,27 +183,31 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	@Override
 	public String visit(ASTproc node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String proc = "proc(" + node.getName() + ", [";
-		for (int i = 0; i < args.size(); i++)
+		String proc = "proc(" + node.getName().accept(this, context) + ", [";
+		for (int i = 0; i < args.size() - 1; i++)
 			proc += args.get(i).accept(this, context);
-		proc += args.get(args.size() - 1) + "], " + node.getBlock().accept(this, context) + ")";
+		proc += args.get(args.size() - 1).accept(this, context) + "], " + node.getBlock().accept(this, context) + ")";
 		return proc;
 	}
 
 	@Override
 	public String visit(ASTprocRec node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String proc = "procRec(" + node.getName() + ", [";
+		String proc = "procRec(" + node.getName().accept(this, context) + ", [";
 		for (int i = 0; i < args.size(); i++)
-			proc += args.get(i).accept(this, context);
-		proc += args.get(args.size() - 1) + "], " + node.getBlock().accept(this, context) + ")";
+			proc += args.get(i).accept(this, context) + ", ";
+		proc += args.get(args.size() - 1).accept(this, context) + "], " + node.getBlock().accept(this, context) + ")";
 		return proc;
 	}
 
 	@Override
 	public String visit(ASTcall node, Void context) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<IASTexpression> args = node.getArgs();
+		String call = "call(" + node.getProc().getString() + ", [";
+		for (int i = 0; i < args.size() - 1; i++)
+			call += args.get(i).accept(this, context) + ", ";
+		call += args.get(args.size() - 1).accept(this, context) + "])";
+		return call;
 	}
 	
 }

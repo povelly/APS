@@ -34,4 +34,17 @@ public class ASTtypes implements IASTnode, IASTvisitable {
 		return visitor.visit(this, env);
 	}
 	
+	@Override
+	public String toString() {
+		String types = "";
+		ASTtypes t = this;
+		while (t != null) {
+			types += t.type.asString();
+			if (t.next != null)
+				types += " * ";
+			t = t.next;
+		}
+		return types;
+	}
+	
 }
