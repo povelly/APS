@@ -14,7 +14,10 @@ import aps0.ast.ASTnum;
 import aps0.ast.ASToperation;
 import aps0.ast.ASTtypes;
 import aps1.ast.ASTblock;
+import aps1.ast.ASTcall;
 import aps1.ast.ASTifBlock;
+import aps1.ast.ASTproc;
+import aps1.ast.ASTprocRec;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
@@ -64,5 +67,8 @@ public interface IASTvisitor<Result, Env, Err extends Exception> {
 	public Result visit(ASTifBlock node, Env context) throws Err;
 	public Result visit(ASTset node, Env context) throws Err;
 	public Result visit(ASTwhile node, Env context) throws Err;
+	public Result visit(ASTproc node, Env context) throws Err;
+	public Result visit(ASTprocRec node, Env context) throws Err;
+	public Result visit(ASTcall node, Env context) throws Err;
 
 }

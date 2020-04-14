@@ -18,7 +18,10 @@ import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTprogram;
 import aps0.interfaces.IASTvisitor;
 import aps1.ast.ASTblock;
+import aps1.ast.ASTcall;
 import aps1.ast.ASTifBlock;
+import aps1.ast.ASTproc;
+import aps1.ast.ASTprocRec;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
@@ -33,8 +36,9 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(IASTprogram node, Context context) throws Exception {
+		Context ctx = new Context(null, null, null);
 		for (IASTcommand command : node.getCommands())
-			command.accept(this, this.globalVars);
+			command.accept(this, ctx);
 		return null;
 	}
 
@@ -50,10 +54,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 			this.globalVars.extend(node.getName(), node.getExpr().accept(this, context));
 			return null;
 		}
-		if (!this.globalVars.contains(node.getName()))
-			this.globalVars.extend(node.getName(), node.getExpr().accept(this, context));
-		else
-			this.globalVars.setValue(node.getName(), node.getExpr().accept(this, context));
+		this.globalVars.extend(node.getName(), node.getExpr().accept(this, context));
 		return null;
 	}
 
@@ -71,7 +72,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTarg node, Context context) throws Exception {
-		return context.getValue(node.getName());
+		return context.get(node.getName());
 	}
 
 	@Override
@@ -86,10 +87,9 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTident node, Context context) throws Exception {
-		if (context.contains(node)) {
-			return context.getValue(node);
-		}
-		return globalVars.getValue(node);
+		if (context.contains(node))
+			return context.get(node);
+		return globalVars.get(node);
 	}
 
 	@Override
@@ -104,8 +104,8 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	public Object visit(ASToperation node, Context context) throws Exception { // TODO fixer les types (call evalAsBool)
 		switch (node.getOperator()) {
 		case ADD:
-			return (int) node.getLeftOperand().accept(this, context)
-					+ (int) node.getRightOperand().accept(this, context);
+			return this.evaluateAsInteger(node.getLeftOperand(), context)
+					+ this.evaluateAsInteger(node.getRightOperand(), context);
 		case SUB:
 			return (int) node.getLeftOperand().accept(this, context)
 					- (int) node.getRightOperand().accept(this, context);
@@ -132,10 +132,11 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 				return (int) left == (int) right;
 			else if (left instanceof Boolean && right instanceof Boolean)
 				return (boolean) left == (boolean) right;
-			return this.evaluateAsBoolean((IASTexpression) node.getLeftOperand(), context) == this.evaluateAsBoolean((IASTexpression) node.getRightOperand(), context);
+			return this.evaluateAsBoolean((IASTexpression) node.getLeftOperand(), context) == this
+					.evaluateAsBoolean((IASTexpression) node.getRightOperand(), context);
 		case LT:
-			return (int) node.getLeftOperand().accept(this, context) < (int) node.getRightOperand().accept(this,
-					context);
+			return this.evaluateAsInteger(node.getLeftOperand(), context) < this
+					.evaluateAsInteger(node.getRightOperand(), context);
 		case NOT:
 			return !((boolean) node.getLeftOperand().accept(this, context));
 		default:
@@ -147,14 +148,15 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	public Object visit(ASTlambda node, Context context) throws Exception {
 		return node;
 	}
-	
+
 	@Override
 	public Object visit(ASTclosure node, Context context) throws Exception {
 		if (!(node.getExpr() instanceof ASTident)) // TODO traiter les autres cas
 			return null;
 		ASTident fname = (ASTident) node.getExpr();
 		ASTfun f = (ASTfun) fname.accept(this, context);
-		// ASTfun f = (ASTfun) node.getExpr().accept(this, context); // leve une exception si le cast est impossible
+		// ASTfun f = (ASTfun) node.getExpr().accept(this, context); // leve une
+		// exception si le cast est impossible
 		Context context2 = context.clone();
 		if (f instanceof ASTfunRec)
 			context2.extend(fname, f);
@@ -167,25 +169,28 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 		return f.getExpr().accept(this, context2);
 	}
 
-//	@Override
-//	public Object visit(ASTclosure node, Context context) throws Exception {
-//		if (!(node.getExpr() instanceof ASTident)) // TODO traiter les autres cas
-//			return null;
-//		ASTident fname = (ASTident) node.getExpr();
-//		if (!(context.getValue(fname) instanceof ASTfun)) // TODO exception/assert not a function
-//			return null;
-//		Context context2 = context.clone();
-//		ASTfun f = (ASTfun) context.getValue(fname);
-//		if (f instanceof ASTfunRec)
-//			context2.extend(fname, f);
-//		if (node.getArguments().size() != f.getArgs().size()) // TODO exception/assert wrong arity
-//			return false;
-//		for (int i = 0; i < f.getArgs().size(); i++) {
-//			// TODO test des types
-//			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
-//		}
-//		return f.getExpr().accept(this, context2);
-//	}
+	// @Override
+	// public Object visit(ASTclosure node, Context context) throws Exception {
+	// if (!(node.getExpr() instanceof ASTident)) // TODO traiter les autres cas
+	// return null;
+	// ASTident fname = (ASTident) node.getExpr();
+	// if (!(context.getValue(fname) instanceof ASTfun)) // TODO exception/assert
+	// not a function
+	// return null;
+	// Context context2 = context.clone();
+	// ASTfun f = (ASTfun) context.getValue(fname);
+	// if (f instanceof ASTfunRec)
+	// context2.extend(fname, f);
+	// if (node.getArguments().size() != f.getArgs().size()) // TODO
+	// exception/assert wrong arity
+	// return false;
+	// for (int i = 0; i < f.getArgs().size(); i++) {
+	// // TODO test des types
+	// context2.extend(f.getArgs().get(i).getName(),
+	// node.getArguments().get(i).accept(this, context));
+	// }
+	// return f.getExpr().accept(this, context2);
+	// }
 
 	@Override
 	public Object visit(ASTtypes node, Context context) throws Exception {
@@ -208,15 +213,15 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTifBlock node, Context context) throws Exception {
-		if (this.evaluateAsBoolean(node.getCondition(), context))
+		if (this.evaluateAsBoolean(node.getCondition(), context)) {
 			return node.getConsequence().accept(this, context);
+		}
 		return node.getAlternant().accept(this, context);
 	}
 
 	@Override
 	public Object visit(ASTset node, Context context) throws Exception {
-		if (context.contains(node.getVar()))
-			context.setValue(node.getVar(), node.getValue().accept(this, context));
+		context.set(node.getVar(), node.getValue().accept(this, context));
 		return null;
 	}
 
@@ -227,14 +232,26 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 		}
 		return null;
 	}
-	
-	private int evaluateAsInteger(IASTexpression expr, Context context) {
+
+	private int evaluateAsInteger(IASTexpression expr, Context context) { // TODO retirer les -1 et gerer les exceptions
 		if (expr instanceof ASTnum)
 			return ((ASTnum) expr).getVal();
 		if (expr instanceof ASTboolean)
 			return ((ASTboolean) expr).getValue() ? 1 : 0;
 		if (expr instanceof ASTident)
-			return ((ASTident) expr).getString().equals("") ? 0 : 1;
+			try {
+				Object res = ((ASTident) expr).accept(this, context);
+				if (res instanceof Integer)
+					return (int) res;
+				if (res instanceof Boolean)
+					return (boolean) res ? 1 : 0;
+				return this.evaluateAsInteger((ASTident) expr.accept(this, context), context);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				return -1;
+			}
+//		if (expr instanceof ASTident)
+//			return ((ASTident) expr).getString().equals("") ? 0 : 1;
 		if (expr instanceof ASTif)
 			try {
 				return this.evaluateAsInteger((IASTexpression) ((ASTif) expr).accept(this, context), context);
@@ -273,8 +290,13 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 			return ((ASTnum) expr).getVal() == 0 ? false : true;
 		if (expr instanceof ASTboolean)
 			return ((ASTboolean) expr).getValue();
-		if (expr instanceof ASTident)
-			return ((ASTident) expr).getString().equals("") ? false : true;
+		if (expr instanceof ASTident) { // TODO verif ici
+			try {
+				return (boolean) expr.accept(this, context);
+			} catch (Exception e) {
+				return false;
+			}
+		}
 		if (expr instanceof ASTif)
 			try {
 				return this.evaluateAsBoolean((IASTexpression) ((ASTif) expr).accept(this, context), context);
@@ -306,6 +328,39 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 				return false;
 			}
 		return false;
+	}
+
+	@Override
+	public Object visit(ASTproc node, Context context) throws Exception {
+		context.extend(node.getName(), node);
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTprocRec node, Context context) throws Exception {
+		context.extend(node.getName(), node);
+		return null;
+	}
+
+	@Override
+	public Object visit(ASTcall node, Context context) throws Exception {
+		ASTproc p = (ASTproc) context.get(node.getProc());
+		if (p == null)
+			return null;
+		Context context2 = context.clone();
+		if (p instanceof ASTprocRec)
+			context2.extend(node.getProc(), p);
+		if (node.getArgs().size() != p.getArgs().size()) // TODO exception/assert wrong arity
+			return false;
+		for (int i = 0; i < p.getArgs().size(); i++) {
+			// TODO test des types
+			context2.extend(p.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
+		}
+		p.getBlock().accept(this, context2);
+		if (!(p instanceof ASTprocRec))
+			context2.remove(node.getProc());
+		context.replace(context2);
+		return null;
 	}
 
 }

@@ -71,6 +71,7 @@ stat: ECHO expr { $$ = new ASTecho((IASTexpression)$2); }
 | SET IDENT expr { $$ = new ASTset(new ASTident($2), (IASTexpression)$3); }
 | IFBLOCK expr block block { $$ = new ASTifBlock((IASTexpression)$2, (ASTblock)$3, (ASTblock)$4); }
 | WHILE expr block { $$ = new ASTwhile((IASTexpression)$2, (ASTblock)$3); }
+| CALL IDENT exprs = { $$ = new ASTcall(new ASTident($2), (List<IASTexpression>)$3); }
 ;
 
 arg: IDENT DP type { $$ = new ASTarg(new ASTident($1), new ASTtypes((IASTtype)$3)); }
@@ -99,6 +100,8 @@ dec: CONST IDENT type expr { $$ = new ASTconst(new ASTident($2), new ASTtypes((I
 | FUN IDENT type LBRA args RBRA expr { $$ = new ASTfun(new ASTident($2), new ASTtypes((IASTtype)$3), (ArrayList<ASTarg>)$5, (IASTexpression)$7); }
 | FUN REC IDENT type LBRA args RBRA expr {$$ = new ASTfunRec(new ASTident($3), new ASTtypes((IASTtype)$4), (ArrayList<ASTarg>)$6, (IASTexpression) $8 ); }
 | VAR IDENT type { $$ = new ASTvar(new ASTident($2), new ASTtypes((IASTtype)$3)); }
+| PROC IDENT LBRA args RBRA block { $$ = new ASTproc(new ASTident($2), (ArrayList<ASTarg>) $4, (ASTblock) $6); }
+| PROC REC IDENT LBRA args RBRA block { $$ = new ASTproc(new ASTident($3), (ArrayList<ASTarg>) $5, (ASTblock) $7); }
 ;
 
 expr:

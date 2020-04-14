@@ -21,7 +21,10 @@ import aps0.interfaces.IASTexpression;
 import aps0.interfaces.IASTprogram;
 import aps0.interfaces.IASTvisitor;
 import aps1.ast.ASTblock;
+import aps1.ast.ASTcall;
 import aps1.ast.ASTifBlock;
+import aps1.ast.ASTproc;
+import aps1.ast.ASTprocRec;
 import aps1.ast.ASTset;
 import aps1.ast.ASTvar;
 import aps1.ast.ASTwhile;
@@ -175,6 +178,32 @@ public class Compiler implements IASTvisitor<String, Void, Exception> {
 	@Override
 	public String visit(ASTwhile node, Void context) throws Exception {
 		return "while(" + node.getCondition().accept(this, context) + ", " + node.getCorps().accept(this, context) + ")";
+	}
+
+	@Override
+	public String visit(ASTproc node, Void context) throws Exception {
+		List<ASTarg> args = node.getArgs();
+		String proc = "proc(" + node.getName() + ", [";
+		for (int i = 0; i < args.size(); i++)
+			proc += args.get(i).accept(this, context);
+		proc += args.get(args.size() - 1) + "], " + node.getBlock().accept(this, context) + ")";
+		return proc;
+	}
+
+	@Override
+	public String visit(ASTprocRec node, Void context) throws Exception {
+		List<ASTarg> args = node.getArgs();
+		String proc = "procRec(" + node.getName() + ", [";
+		for (int i = 0; i < args.size(); i++)
+			proc += args.get(i).accept(this, context);
+		proc += args.get(args.size() - 1) + "], " + node.getBlock().accept(this, context) + ")";
+		return proc;
+	}
+
+	@Override
+	public String visit(ASTcall node, Void context) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

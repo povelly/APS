@@ -21,4 +21,11 @@ public class ASTident implements IASTexpression {
 		return visitor.visit(this, env);
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof ASTident))
+			return false;
+		return this.name.equals(((ASTident) o).getString());
+	}
+	
 }

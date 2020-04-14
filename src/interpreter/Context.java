@@ -1,10 +1,44 @@
 package interpreter;
 
+import java.util.Iterator;
+
 import aps0.ast.ASTident;
 
-public class Context {
+public class Context implements Iterable<Context> {
 
-	public ASTident variable;
+	private class ContextIterator implements Iterator<Context> {
+
+		private Context ctx;
+
+		public ContextIterator() {
+			this.ctx = Context.this;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return this.ctx != null && this.ctx.variable != null;
+		}
+
+		@Override
+		public Context next() {
+			Context current = this.ctx;
+			this.ctx = this.ctx.next;
+			return current;
+		}
+
+	}
+
+	private class UnboundVariableException extends Exception {
+
+		private static final long serialVersionUID = 1L;
+
+		public UnboundVariableException(ASTident variable) {
+			super("Unbound variable " + variable.getString());
+		}
+
+	}
+
+	private ASTident variable;
 	private Object value;
 	private Context next;
 
@@ -14,51 +48,107 @@ public class Context {
 		this.next = next;
 	}
 
-	public Context getNext() {
-		return this.next;
-	}
+//	public static void main(String[] args) {
+//		Context ctx = new Context(null, null, null);
+//		ctx.extend(new ASTident("var1"), 1);
+//		ctx.extend(new ASTident("var2"), 2);
+//		ctx.extend(new ASTident("var3"), 3);
+//		ctx.extend(new ASTident("var4"), 4);
+//		ctx.extend(new ASTident("var3"), -1);
+//
+//		ctx.remove(new ASTident("var3"));
+//
+//		for (Context c : ctx)
+//			System.out.println(c.variable.getString() + " : " + c.value);
+//	}
 
 	public boolean contains(ASTident variable) {
-		if (variable.getString().equals(this.variable.getString()))
-			return true;
-		if (this.next == null)
-			return false;
-		else
-			return this.next.contains(variable);
+		for (Context ctx : this)
+			if (ctx.variable.equals(variable))
+				return true;
+		return false;
 	}
 
-	public Object getValue(ASTident variable) {
-		if (this.variable.getString().equals(variable.getString()))
-			return this.value;
-		if (this.next == null)
-			return null;
-		return this.next.getValue(variable);
+	public Object get(ASTident variable) throws Exception {
+		for (Context ctx : this)
+			if (ctx.variable.equals(variable))
+				return ctx.value;
+		throw new UnboundVariableException(variable);
 	}
 
-	public void setValue(ASTident variable, Object value) {
-		if (this.variable.getString().equals(variable.getString()))
-			this.value = value;
-		if (this.next != null)
-			this.next.setValue(variable, value);
-	}
-
-	public void extend(ASTident variable, Object value) {
-		Context ctx = this;
-		while (ctx.next != null) {
-			if (ctx.variable.getString().equals(variable.getString())) {
+	public void set(ASTident variable, Object value) throws Exception {
+		for (Context ctx : this)
+			if (ctx.variable.equals(variable)) {
 				ctx.value = value;
 				return;
 			}
-			ctx = ctx.next;
-		}
-		ctx.next = new Context(variable, value, null);
+		throw new UnboundVariableException(variable);
 	}
-	
+
+	public void extend(ASTident variable, Object value) {
+		if (this.variable == null || this.variable.equals(variable)) {
+			this.variable = variable;
+			this.value = value;
+		} else if (this.next == null)
+			this.next = new Context(variable, value, null);
+		else {
+			this.next.extend(variable, value);
+		}
+
+	}
+
+	public void remove(ASTident variable) {
+		if (this.variable != null && this.variable.equals(variable)) {
+			if (this.next == null)
+				return;
+			this.variable = this.next.variable;
+			this.value = this.next.value;
+			this.next = this.next.next;
+		} else if (this.next != null && this.next.variable.equals(variable)) {
+			this.next = this.next.next;
+		} else if (this.next != null) {
+			this.next.remove(variable);
+		}
+
+	}
+
+	public void replace(Context ctx) {
+		Context ctx2 = ctx.clone();
+		this.variable = ctx2.variable;
+		this.value = ctx2.value;
+		this.next = ctx2.next;
+	}
+
 	@Override
 	public Context clone() {
 		if (this.next == null)
-			return new Context(this.variable, this.value, this.next);
+			return new Context(this.variable, this.value, null);
 		return new Context(this.variable, this.value, this.next.clone());
+	}
+
+	@Override
+	public Iterator<Context> iterator() {
+		return new ContextIterator();
+	}
+
+	public int size() {
+		if (this.variable == null)
+			return 0;
+		if (this.next == null)
+			return 1;
+		return 1 + this.next.size();
+	}
+
+	public void display() {
+		System.out.println("=============");
+		System.out.println("Ctx : (@:" + this.toString() + " size:" + this.size() + ")");
+		for (Context ctx : this) {
+			if (ctx.value != null)
+				System.out.println(ctx.variable.getString() + ": " + ctx.value);
+			else
+				System.out.println(ctx.variable.getString() + ": " + "null");
+		}
+		System.out.println("=============");
 	}
 
 }
