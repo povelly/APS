@@ -1,30 +1,30 @@
 package interpreter;
 
-import aps0.ast.ASTarg;
-import aps0.ast.ASTboolean;
-import aps0.ast.ASTclosure;
-import aps0.ast.ASTconst;
-import aps0.ast.ASTecho;
-import aps0.ast.ASTfun;
-import aps0.ast.ASTfunRec;
-import aps0.ast.ASTident;
-import aps0.ast.ASTif;
-import aps0.ast.ASTlambda;
-import aps0.ast.ASTnum;
-import aps0.ast.ASToperation;
-import aps0.ast.ASTtypes;
-import aps0.interfaces.IASTcommand;
-import aps0.interfaces.IASTexpression;
-import aps0.interfaces.IASTprogram;
-import aps0.interfaces.IASTvisitor;
-import aps1.ast.ASTblock;
-import aps1.ast.ASTcall;
-import aps1.ast.ASTifBlock;
-import aps1.ast.ASTproc;
-import aps1.ast.ASTprocRec;
-import aps1.ast.ASTset;
-import aps1.ast.ASTvar;
-import aps1.ast.ASTwhile;
+import aps0.ASTarg;
+import aps0.ASTboolean;
+import aps0.ASTclosure;
+import aps0.ASTconst;
+import aps0.ASTecho;
+import aps0.ASTfun;
+import aps0.ASTfunRec;
+import aps0.ASTident;
+import aps0.ASTif;
+import aps0.ASTlambda;
+import aps0.ASTnum;
+import aps0.ASToperation;
+import aps0.ASTtypes;
+import aps1.ASTblock;
+import aps1.ASTcall;
+import aps1.ASTifBlock;
+import aps1.ASTproc;
+import aps1.ASTprocRec;
+import aps1.ASTset;
+import aps1.ASTvar;
+import aps1.ASTwhile;
+import interfaces.IASTcommand;
+import interfaces.IASTexpression;
+import interfaces.IASTprogram;
+import interfaces.IASTvisitor;
 
 public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 

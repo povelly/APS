@@ -2,7 +2,8 @@ package interpreter;
 
 import java.util.Iterator;
 
-import aps0.ast.ASTident;
+import aps0.ASTident;
+import exceptions.UnboundVariableException;
 
 public class Context implements Iterable<Context> {
 
@@ -24,16 +25,6 @@ public class Context implements Iterable<Context> {
 			Context current = this.ctx;
 			this.ctx = this.ctx.next;
 			return current;
-		}
-
-	}
-
-	private class UnboundVariableException extends Exception {
-
-		private static final long serialVersionUID = 1L;
-
-		public UnboundVariableException(ASTident variable) {
-			super("Unbound variable " + variable.getString());
 		}
 
 	}
@@ -61,28 +52,30 @@ public class Context implements Iterable<Context> {
 //		for (Context c : ctx)
 //			System.out.println(c.variable.getString() + " : " + c.value);
 //	}
-
+	
 	public boolean contains(ASTident variable) {
-		for (Context ctx : this)
-			if (ctx.variable.equals(variable))
-				return true;
-		return false;
+		if (this.variable == null)
+			return false;
+		if (this.variable.equals(variable))
+			return true;
+		return this.next != null && this.next.contains(variable);
 	}
-
+	
 	public Object get(ASTident variable) throws Exception {
-		for (Context ctx : this)
-			if (ctx.variable.equals(variable))
-				return ctx.value;
+		if (this.variable != null && this.variable.equals(variable))
+			return this.value;
+		if (this.next != null)
+			return this.next.get(variable);
 		throw new UnboundVariableException(variable);
 	}
-
+	
 	public void set(ASTident variable, Object value) throws Exception {
-		for (Context ctx : this)
-			if (ctx.variable.equals(variable)) {
-				ctx.value = value;
-				return;
-			}
-		throw new UnboundVariableException(variable);
+		if (this.variable != null && this.variable.equals(variable))
+			this.value = value;
+		else if (this.next != null)
+			this.next.set(variable, value);
+		else
+			throw new UnboundVariableException(variable);
 	}
 
 	public void extend(ASTident variable, Object value) {

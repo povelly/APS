@@ -4,8 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-import aps0.ast.ASTident;
-import aps0.interfaces.IASTprogram;
+import aps0.ASTident;
+import interfaces.IASTprogram;
 import interpreter.Context;
 import interpreter.Interpreter;
 

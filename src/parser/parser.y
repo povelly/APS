@@ -3,9 +3,9 @@
   import java.util.ArrayList;
   import java.util.List;
   import java.util.Arrays;
-  import aps0.ast.*;
-  import aps0.interfaces.*;
-  import aps1.ast.*;
+  import interfaces.*;
+  import aps0.*;
+  import aps1.*;
 %}
 
 %token NL /* newline */
