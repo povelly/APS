@@ -357,7 +357,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 			context2.extend(p.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}
 		p.getBlock().accept(this, context2);
-		if (!(p instanceof ASTprocRec))
+		if (!(p instanceof ASTprocRec)) // TODO faux, à modif
 			context2.remove(node.getProc());
 		context.replace(context2);
 		return null;
