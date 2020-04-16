@@ -21,10 +21,12 @@ import aps1.ASTprocRec;
 import aps1.ASTset;
 import aps1.ASTvar;
 import aps1.ASTwhile;
+import exceptions.ArityException;
 import interfaces.IASTcommand;
 import interfaces.IASTexpression;
 import interfaces.IASTprogram;
 import interfaces.IASTvisitor;
+import interfaces.IFun;
 
 public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
@@ -49,11 +51,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	}
 
 	@Override
-	public Object visit(ASTconst node, Context context) throws Exception { // TODO ça marche mais bof
-		if (node.getExpr() instanceof ASTlambda) {
-			this.globalVars.extend(node.getName(), node.getExpr().accept(this, context));
-			return null;
-		}
+	public Object visit(ASTconst node, Context context) throws Exception {
 		this.globalVars.extend(node.getName(), node.getExpr().accept(this, context));
 		return null;
 	}
@@ -151,21 +149,33 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTclosure node, Context context) throws Exception {
-		if (!(node.getExpr() instanceof ASTident)) // TODO traiter les autres cas
-			return null;
-		ASTident fname = (ASTident) node.getExpr();
-		ASTfun f = (ASTfun) fname.accept(this, context);
-		// ASTfun f = (ASTfun) node.getExpr().accept(this, context); // leve une
-		// exception si le cast est impossible
+		IFun f = null;
 		Context context2 = context.clone();
-		if (f instanceof ASTfunRec)
-			context2.extend(fname, f);
-		if (node.getArguments().size() != f.getArgs().size()) // TODO exception/assert wrong arity
-			return false;
+
+		if (node.getExpr() instanceof ASTident) {
+			ASTident fname = (ASTident) node.getExpr();
+			f = (IFun) fname.accept(this, context);
+
+			if (f instanceof ASTfunRec)
+				context2.extend(fname, f);
+
+		} else if (node.getExpr() instanceof ASTlambda) {
+			f = (IFun) node.getExpr();
+		} else if (node.getExpr() instanceof ASTclosure) {
+			// TODO
+		}
+		if (f == null)
+			System.out.println("F VAUT NULL");
+		//System.out.println(node.getExpr().getClass().getName());
+		// exception
+
+		if (node.getArguments().size() != f.getArgs().size())
+			throw new ArityException(f);
 		for (int i = 0; i < f.getArgs().size(); i++) {
 			// TODO test des types
 			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
 		}
+		
 		return f.getExpr().accept(this, context2);
 	}
 
@@ -174,11 +184,10 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 	// if (!(node.getExpr() instanceof ASTident)) // TODO traiter les autres cas
 	// return null;
 	// ASTident fname = (ASTident) node.getExpr();
-	// if (!(context.getValue(fname) instanceof ASTfun)) // TODO exception/assert
-	// not a function
-	// return null;
+	// ASTfun f = (ASTfun) fname.accept(this, context);
+	// // ASTfun f = (ASTfun) node.getExpr().accept(this, context); // leve une
+	// // exception si le cast est impossible
 	// Context context2 = context.clone();
-	// ASTfun f = (ASTfun) context.getValue(fname);
 	// if (f instanceof ASTfunRec)
 	// context2.extend(fname, f);
 	// if (node.getArguments().size() != f.getArgs().size()) // TODO
@@ -250,8 +259,8 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 				e1.printStackTrace();
 				return -1;
 			}
-//		if (expr instanceof ASTident)
-//			return ((ASTident) expr).getString().equals("") ? 0 : 1;
+		// if (expr instanceof ASTident)
+		// return ((ASTident) expr).getString().equals("") ? 0 : 1;
 		if (expr instanceof ASTif)
 			try {
 				return this.evaluateAsInteger((IASTexpression) ((ASTif) expr).accept(this, context), context);
