@@ -13,9 +13,8 @@ public class ASTfunRec extends ASTfun implements IFun {
 	}
 	
 	@Override
-	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
-			throws Err {
+	public <Result, Env> Result accept(IASTvisitor<Result, Env> visitor, Env env) throws Exception {
 		return visitor.visit(this, env);
 	}
-
+	
 }

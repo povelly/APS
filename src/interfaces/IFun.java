@@ -10,7 +10,6 @@ public interface IFun extends IASTvisitable {
 
 	public IASTexpression getExpr();
 
-	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
-			throws Err;
+	public <Result, Env> Result accept(IASTvisitor<Result, Env> visitor, Env data) throws Exception;
 
 }

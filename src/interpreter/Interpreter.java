@@ -27,7 +27,7 @@ import interfaces.IASTprogram;
 import interfaces.IASTvisitor;
 import interfaces.IFun;
 
-public class Interpreter implements IASTvisitor<Object, Context, Exception> {
+public class Interpreter implements IASTvisitor<Object, Context> {
 
 	private Context globalVars;
 	private IntegerEvaluator integerEvaluator = new IntegerEvaluator(this);

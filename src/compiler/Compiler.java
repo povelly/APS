@@ -29,7 +29,7 @@ import interfaces.IASTexpression;
 import interfaces.IASTprogram;
 import interfaces.IASTvisitor;
 
-public class Compiler implements IASTvisitor<String, Void, Exception> {
+public class Compiler implements IASTvisitor<String, Void> {
 
 	public Compiler() {
 

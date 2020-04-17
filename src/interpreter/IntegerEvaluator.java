@@ -10,11 +10,11 @@ import aps0.ASToperation;
 import interfaces.IASTexpression;
 import interfaces.IASTvisitor;
 
-public class IntegerEvaluator implements ExpressionEvaluator<Integer, Context, Exception> {
+public class IntegerEvaluator implements ExpressionEvaluator<Integer, Context> {
 	
-	private IASTvisitor<Object, Context, Exception> v;
+	private IASTvisitor<Object, Context> v;
 
-	public IntegerEvaluator(IASTvisitor<Object, Context, Exception> v) {
+	public IntegerEvaluator(IASTvisitor<Object, Context> v) {
 		this.v = v;
 	}
 

@@ -18,11 +18,9 @@ public class ASTprog implements IASTprogram {
 		return this.commands;
 	}
 	
-    @Override
-	public <Result, Env, Err extends Exception> 
-    Result accept(IASTvisitor<Result, Env, Err> visitor, Env data)
-            throws Err {
-        return visitor.visit(this, data);
-    }
+	@Override
+	public <Result, Env> Result accept(IASTvisitor<Result, Env> visitor, Env env) throws Exception {
+		return visitor.visit(this, env);
+	}
 
 }

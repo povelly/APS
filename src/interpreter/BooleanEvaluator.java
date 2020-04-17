@@ -10,11 +10,11 @@ import aps0.ASToperation;
 import interfaces.IASTexpression;
 import interfaces.IASTvisitor;
 
-public class BooleanEvaluator implements ExpressionEvaluator<Boolean, Context, Exception> {
+public class BooleanEvaluator implements ExpressionEvaluator<Boolean, Context> {
 	
-	private IASTvisitor<Object, Context, Exception> v;
+	private IASTvisitor<Object, Context> v;
 
-	public BooleanEvaluator(IASTvisitor<Object, Context, Exception> v) {
+	public BooleanEvaluator(IASTvisitor<Object, Context> v) {
 		this.v = v;
 	}
 

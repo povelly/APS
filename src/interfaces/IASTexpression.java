@@ -8,6 +8,6 @@ import interpreter.ExpressionEvaluator;
  */
 public interface IASTexpression extends IASTnode, IASTvisitable {
 	
-	<Result, Env, Err> Result accept(ExpressionEvaluator<Result, Env, Exception> visitor, Env data) throws Exception;
+	<Result, Env> Result accept(ExpressionEvaluator<Result, Env> visitor, Env data) throws Exception;
 	
 }

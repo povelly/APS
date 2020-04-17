@@ -17,13 +17,12 @@ public class ASTnum implements IASTexpression {
 	}
 
 	@Override
-	public <Result, Env, Err extends Exception> Result accept(IASTvisitor<Result, Env, Err> visitor, Env env)
-			throws Err {
+	public <Result, Env> Result accept(IASTvisitor<Result, Env> visitor, Env env) throws Exception {
 		return visitor.visit(this, env);
 	}
 	
 	@Override
-	public <Result, Env, Err> Result accept(ExpressionEvaluator<Result, Env, Exception> visitor, Env env)
+	public <Result, Env> Result accept(ExpressionEvaluator<Result, Env> visitor, Env env)
 			throws Exception {
 		return visitor.visit(this, env);
 	}
