@@ -31,10 +31,6 @@ import interfaces.IASTvisitor;
 
 public class Compiler implements IASTvisitor<String, Void> {
 
-	public Compiler() {
-
-	}
-
 	@Override
 	public String visit(IASTprogram node, Void context) throws Exception {
 		List<IASTcommand> commands = node.getCommands();

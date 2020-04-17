@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-import aps0.ASTident;
 import interfaces.IASTprogram;
 import interpreter.Context;
 import interpreter.Interpreter;
@@ -20,8 +19,8 @@ public class RunInterpreter {
 			prog = (IASTprogram) yyparser.yyval.obj;
 
 			if (prog != null) {
-				Interpreter interpreter = new Interpreter(new Context(new ASTident("vglobale1"), 7, null));
-				prog.accept(interpreter, null);
+				Interpreter interpreter = new Interpreter();
+				prog.accept(interpreter, new Context());
 			}
 			else
 				System.out.println("Null");

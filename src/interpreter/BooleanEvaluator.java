@@ -12,7 +12,7 @@ import interfaces.IASTvisitor;
 
 public class BooleanEvaluator implements ExpressionEvaluator<Boolean, Context> {
 	
-	private IASTvisitor<Object, Context> v;
+	private final IASTvisitor<Object, Context> v;
 
 	public BooleanEvaluator(IASTvisitor<Object, Context> v) {
 		this.v = v;

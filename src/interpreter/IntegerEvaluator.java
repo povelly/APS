@@ -12,7 +12,7 @@ import interfaces.IASTvisitor;
 
 public class IntegerEvaluator implements ExpressionEvaluator<Integer, Context> {
 	
-	private IASTvisitor<Object, Context> v;
+	private final IASTvisitor<Object, Context> v;
 
 	public IntegerEvaluator(IASTvisitor<Object, Context> v) {
 		this.v = v;

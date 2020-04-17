@@ -32,6 +32,12 @@ public class Context implements Iterable<Context> {
 	private ASTident variable;
 	private Object value;
 	private Context next;
+	
+	public Context() {
+		this.variable = null;
+		this.value = null;
+		this.next = null;
+	}
 
 	public Context(ASTident variable, Object value, Context next) {
 		this.variable = variable;
