@@ -23,7 +23,6 @@ import aps1.ASTvar;
 import aps1.ASTwhile;
 import exceptions.ArityException;
 import interfaces.IASTcommand;
-import interfaces.IASTexpression;
 import interfaces.IASTprogram;
 import interfaces.IASTvisitor;
 import interfaces.IFun;
@@ -31,6 +30,8 @@ import interfaces.IFun;
 public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	private Context globalVars;
+	private IntegerEvaluator integerEvaluator = new IntegerEvaluator(this);
+	private BooleanEvaluator booleanEvaluator = new BooleanEvaluator(this);
 
 	public Interpreter(Context context) {
 		this.globalVars = context;
@@ -92,33 +93,27 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTif node, Context context) throws Exception {
-		if (this.evaluateAsBoolean(node.getCondition(), context)) {
+		if (node.getCondition().accept(booleanEvaluator, context)) {
 			return node.getConsequence().accept(this, context);
 		}
 		return node.getAlternant().accept(this, context);
 	}
 
 	@Override
-	public Object visit(ASToperation node, Context context) throws Exception { // TODO fixer les types (call evalAsBool)
+	public Object visit(ASToperation node, Context context) throws Exception {
 		switch (node.getOperator()) {
 		case ADD:
-			return this.evaluateAsInteger(node.getLeftOperand(), context)
-					+ this.evaluateAsInteger(node.getRightOperand(), context);
+			return node.getLeftOperand().accept(integerEvaluator, context) + node.getRightOperand().accept(integerEvaluator, context);
 		case SUB:
-			return (int) node.getLeftOperand().accept(this, context)
-					- (int) node.getRightOperand().accept(this, context);
+			return node.getLeftOperand().accept(integerEvaluator, context) - node.getRightOperand().accept(integerEvaluator, context);
 		case MUL:
-			return (int) node.getLeftOperand().accept(this, context)
-					* (int) node.getRightOperand().accept(this, context);
+			return node.getLeftOperand().accept(integerEvaluator, context) * node.getRightOperand().accept(integerEvaluator, context);
 		case DIV:
-			return (int) node.getLeftOperand().accept(this, context)
-					/ (int) node.getRightOperand().accept(this, context);
+			return node.getLeftOperand().accept(integerEvaluator, context) / node.getRightOperand().accept(integerEvaluator, context);
 		case AND:
-			return (boolean) node.getLeftOperand().accept(this, context)
-					&& (boolean) node.getRightOperand().accept(this, context);
+			return node.getLeftOperand().accept(booleanEvaluator, context) && node.getRightOperand().accept(booleanEvaluator, context);
 		case OR:
-			return (boolean) node.getLeftOperand().accept(this, context)
-					|| (boolean) node.getRightOperand().accept(this, context);
+			return node.getLeftOperand().accept(booleanEvaluator, context) || node.getRightOperand().accept(booleanEvaluator, context);
 		case EQ:
 			Object left = node.getLeftOperand().accept(this, context);
 			Object right = node.getRightOperand().accept(this, context);
@@ -130,13 +125,11 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 				return (int) left == (int) right;
 			else if (left instanceof Boolean && right instanceof Boolean)
 				return (boolean) left == (boolean) right;
-			return this.evaluateAsBoolean((IASTexpression) node.getLeftOperand(), context) == this
-					.evaluateAsBoolean((IASTexpression) node.getRightOperand(), context);
+			return node.getLeftOperand().accept(booleanEvaluator, context).equals(node.getRightOperand().accept(booleanEvaluator, context));
 		case LT:
-			return this.evaluateAsInteger(node.getLeftOperand(), context) < this
-					.evaluateAsInteger(node.getRightOperand(), context);
+			return node.getLeftOperand().accept(integerEvaluator, context) < node.getRightOperand().accept(integerEvaluator, context);
 		case NOT:
-			return !((boolean) node.getLeftOperand().accept(this, context));
+			return !node.getLeftOperand().accept(booleanEvaluator, context);
 		default:
 			return null;
 		}
@@ -222,7 +215,7 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTifBlock node, Context context) throws Exception {
-		if (this.evaluateAsBoolean(node.getCondition(), context)) {
+		if (node.getCondition().accept(booleanEvaluator, context)) {
 			return node.getConsequence().accept(this, context);
 		}
 		return node.getAlternant().accept(this, context);
@@ -236,107 +229,10 @@ public class Interpreter implements IASTvisitor<Object, Context, Exception> {
 
 	@Override
 	public Object visit(ASTwhile node, Context context) throws Exception {
-		while (this.evaluateAsBoolean(node.getCondition(), context)) {
+		while (node.getCondition().accept(booleanEvaluator, context)) {
 			node.getCorps().accept(this, context);
 		}
 		return null;
-	}
-
-	private int evaluateAsInteger(IASTexpression expr, Context context) { // TODO retirer les -1 et gerer les exceptions
-		if (expr instanceof ASTnum)
-			return ((ASTnum) expr).getVal();
-		if (expr instanceof ASTboolean)
-			return ((ASTboolean) expr).getValue() ? 1 : 0;
-		if (expr instanceof ASTident)
-			try {
-				Object res = ((ASTident) expr).accept(this, context);
-				if (res instanceof Integer)
-					return (int) res;
-				if (res instanceof Boolean)
-					return (boolean) res ? 1 : 0;
-				return this.evaluateAsInteger((ASTident) expr.accept(this, context), context);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				return -1;
-			}
-		// if (expr instanceof ASTident)
-		// return ((ASTident) expr).getString().equals("") ? 0 : 1;
-		if (expr instanceof ASTif)
-			try {
-				return this.evaluateAsInteger((IASTexpression) ((ASTif) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return -1;
-			}
-		if (expr instanceof ASToperation)
-			try {
-				Object result = ((ASToperation) expr).accept(this, context);
-				if (result instanceof Integer)
-					return (int) result;
-				if (result instanceof Boolean)
-					return (boolean) result ? 1 : 0;
-				return -1;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return -1;
-			}
-		if (expr instanceof ASTlambda)
-			try {
-				return this.evaluateAsInteger((IASTexpression) ((ASTlambda) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return -1;
-			}
-		if (expr instanceof ASTclosure)
-			try {
-				return this.evaluateAsInteger((IASTexpression) ((ASTclosure) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return -1;
-			}
-		return -1;
-	}
-
-	private boolean evaluateAsBoolean(IASTexpression expr, Context context) { // TODO faire des verifs
-		if (expr instanceof ASTnum)
-			return ((ASTnum) expr).getVal() == 0 ? false : true;
-		if (expr instanceof ASTboolean)
-			return ((ASTboolean) expr).getValue();
-		if (expr instanceof ASTident) { // TODO verif ici
-			try {
-				return (boolean) expr.accept(this, context);
-			} catch (Exception e) {
-				return false;
-			}
-		}
-		if (expr instanceof ASTif)
-			try {
-				return this.evaluateAsBoolean((IASTexpression) ((ASTif) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return false;
-			}
-		if (expr instanceof ASToperation)
-			try {
-				Object result = ((ASToperation) expr).accept(this, context);
-				if (result instanceof Integer)
-					return (int) result == 0 ? false : true;
-				if (result instanceof Boolean)
-					return (boolean) result;
-				return false;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		if (expr instanceof ASTlambda)
-			try {
-				return this.evaluateAsBoolean((IASTexpression) ((ASTlambda) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return false;
-			}
-		if (expr instanceof ASTclosure)
-			try {
-				return this.evaluateAsBoolean((IASTexpression) ((ASTclosure) expr).accept(this, context), context);
-			} catch (Exception e) {
-				return false;
-			}
-		return false;
 	}
 
 	@Override
