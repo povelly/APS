@@ -13,6 +13,7 @@
 %token <sval> IDENT /* an identifier */
 %token <ival> INTEGER
 %token <bool> BOOLEAN /* boolean */
+%token VOID
 
 %token LBRA RBRA /* bracket */
 %token LPAR RPAR /* parenthesis */
@@ -86,6 +87,7 @@ $$ = r; }
 
 type: BOOLEAN { $$ = ASTprimitiveType.BOOLEAN; }
 | INTEGER { $$ = ASTprimitiveType.INTEGER; }
+| VOID { $$ = ASTprimitiveType.VOID; }
 | LPAR types ARROW type RPAR { $$ = new ASTfunctionType((ASTtypes)$2, (IASTtype)$4); }
 ;
 

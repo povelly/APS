@@ -32,6 +32,7 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 	private final Context globalVars = new Context();
 	private final IntegerEvaluator integerEvaluator = new IntegerEvaluator(this);
 	private final BooleanEvaluator booleanEvaluator = new BooleanEvaluator(this);
+	private final PartialEvaluator partialEvaluator = new PartialEvaluator(this);
 
 	@Override
 	public Object visit(IASTprogram node, Context context) throws Exception {
@@ -142,32 +143,28 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 		if (node.getExpr() instanceof ASTident) {
 			ASTident fname = (ASTident) node.getExpr();
 			f = (IFun) fname.accept(this, context);
-
 			if (f instanceof ASTfunRec)
 				context2.extend(fname, f);
-
 		} else if (node.getExpr() instanceof ASTlambda) {
 			f = (IFun) node.getExpr();
 		} else if (node.getExpr() instanceof ASTclosure) {
-			f = (IFun) node.getExpr();
+			ASTclosure partialClosure = (ASTclosure) node.getExpr().accept(this.partialEvaluator, context2);	
+			f = (IFun) partialClosure.accept(this, context2); 
 		}
-		if (f == null)
-			System.out.println("F VAUT NULL");
-		//System.out.println(node.getExpr().getClass().getName());
-		// exception
 
 		if (node.getArguments().size() != f.getArgs().size())
 			throw new ArityException(f);
 		for (int i = 0; i < f.getArgs().size(); i++) {
 			// TODO test des types
+			// System.out.println("def:"+f.getArgs().get(i).getTypes().toString());
+			// System.out.println("call:"+node.getArguments().get(i).toString());
 			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
 		}
-		
 		return f.getExpr().accept(this, context2);
 	}
 
 	@Override
-	public Object visit(ASTtypes node, Context context) throws Exception { // TODO
+	public Object visit(ASTtypes node, Context context) throws Exception {
 		return null;
 	}
 

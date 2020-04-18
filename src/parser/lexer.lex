@@ -36,6 +36,7 @@ nls = \n | \r | \r\n
 /* primitive types */
 "bool" { return Parser.BOOLEAN; }
 "int" { return Parser.INTEGER; }
+"void" { return Parser.VOID; }
 
 /* booleans */
 "true" { return Parser.TRUE; }
