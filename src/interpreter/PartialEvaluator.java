@@ -12,6 +12,7 @@ import aps0.ASTlambda;
 import aps0.ASTnum;
 import aps0.ASToperation;
 import exceptions.ArityException;
+import exceptions.TypeException;
 import exceptions.UnboundVariableException;
 import interfaces.IASTexpression;
 import interfaces.IASTvisitor;
@@ -37,7 +38,7 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 	@Override
 	public IASTexpression visit(ASTident node, Context context) throws Exception {
 		try {
-			Object res = node.accept(v, context);
+			Object res = node.accept(this.v, context);
 			if (res instanceof Integer)
 				return new ASTnum((int) res);
 			if (res instanceof Boolean)
@@ -70,7 +71,7 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 	}
 
 	@Override
-	public IASTexpression visit(ASTclosure node, Context context) throws Exception { // TODO exception type
+	public IASTexpression visit(ASTclosure node, Context context) throws Exception {
 		List<IASTexpression> arguments = new ArrayList<IASTexpression>();
 		for (IASTexpression arg : node.getArguments())
 			arguments.add(arg.accept(this, context));
@@ -80,7 +81,10 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 			throw new ArityException(f);
 		
 		Context context2 = context.clone();
+		TypeChecker tc = new TypeChecker(this.v, context);
 		for (int i = 0; i < node.getArguments().size(); i++) {
+			if (!node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()))
+				throw new TypeException();
 			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
 		}
 		return new ASTclosure(node.getExpr().accept(this, context2), arguments);

@@ -22,6 +22,7 @@ import aps1.ASTset;
 import aps1.ASTvar;
 import aps1.ASTwhile;
 import exceptions.ArityException;
+import exceptions.TypeException;
 import interfaces.IASTcommand;
 import interfaces.IASTprogram;
 import interfaces.IASTvisitor;
@@ -154,8 +155,13 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 
 		if (node.getArguments().size() != f.getArgs().size())
 			throw new ArityException(f);
+		TypeChecker tc = new TypeChecker(this, context);
 		for (int i = 0; i < f.getArgs().size(); i++) {
-			// TODO test des types
+			if (!node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()))
+				throw new TypeException();
+			// System.out.println("typecheck: " + node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()));
+			
+			
 			// System.out.println("def:"+f.getArgs().get(i).getTypes().toString());
 			// System.out.println("call:"+node.getArguments().get(i).toString());
 			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
@@ -212,9 +218,10 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 		context.extend(node.getName(), node);
 		return null;
 	}
-
+	
 	@Override
 	public Object visit(ASTcall node, Context context) throws Exception {
+		// TODO faux, car les parametres doivent etre retirés du context après le call
 		ASTproc p = (ASTproc) context.get(node.getProc());
 		if (p == null)
 			return null;
@@ -228,7 +235,7 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 			context2.extend(p.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}
 		p.getBlock().accept(this, context2);
-		if (!(p instanceof ASTprocRec)) // TODO faux, à modif
+		if (!(p instanceof ASTprocRec))
 			context2.remove(node.getProc());
 		context.replace(context2);
 		return null;
