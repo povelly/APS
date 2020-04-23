@@ -10,6 +10,7 @@ import aps0.ASTnum;
 import aps0.ASToperation;
 import aps0.ASTprimitiveType;
 import aps0.ASTtypes;
+import aps1.ASTproc;
 import interfaces.IASTexpression;
 import interfaces.IASTvisitor;
 
@@ -44,6 +45,8 @@ public class TypeChecker implements ExpressionEvaluator<Boolean, ASTtypes> {
 			ASTfun f = (ASTfun) res;
 			res = new ASTlambda(f.getArgs(), f.getExpr());
 		}
+		if (res instanceof ASTproc)
+			return type.getType().equals(ASTprimitiveType.VOID);
 		return ((IASTexpression) res).accept(this, type);
 	}
 

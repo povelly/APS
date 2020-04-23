@@ -1,0 +1,11 @@
+[
+  PROC p [n:int]
+    [
+      ECHO n
+    ];
+  PROC q [proc:void, n:int]
+    [
+      CALL proc (mul n 2)
+    ];
+  CALL q p 21
+]

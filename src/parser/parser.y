@@ -87,6 +87,7 @@ $$ = r; }
 
 type: BOOLEAN { $$ = ASTprimitiveType.BOOLEAN; }
 | INTEGER { $$ = ASTprimitiveType.INTEGER; }
+| VOID { $$ = ASTprimitiveType.VOID; }
 | LPAR types ARROW type RPAR { $$ = new ASTfunctionType((ASTtypes)$2, (IASTtype)$4); }
 ;
 

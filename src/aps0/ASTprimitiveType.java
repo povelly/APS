@@ -4,7 +4,7 @@ import interfaces.IASTtype;
 
 public enum ASTprimitiveType implements IASTtype {
 	
-	INTEGER("int"), BOOLEAN("boolean");
+	INTEGER("int"), BOOLEAN("boolean"), VOID("void");
 	private String name;
 
 	ASTprimitiveType(String name) {
