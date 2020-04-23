@@ -155,9 +155,9 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 
 		if (node.getArguments().size() != f.getArgs().size())
 			throw new ArityException(f);
-		TypeChecker tc = new TypeChecker(this, context);
+		TypeChecker typeChecker = new TypeChecker(this, context);
 		for (int i = 0; i < f.getArgs().size(); i++) {
-			if (!node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()))
+			if (!node.getArguments().get(i).accept(typeChecker, f.getArgs().get(i).getTypes()))
 				throw new TypeException();
 			// System.out.println("typecheck: " + node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()));
 			
@@ -230,8 +230,10 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 			context2.extend(node.getProc(), p);
 		if (node.getArgs().size() != p.getArgs().size())
 			throw new ArityException(p);
+		TypeChecker typeChecker = new TypeChecker(this, context);
 		for (int i = 0; i < p.getArgs().size(); i++) {
-			// TODO test des types
+			if (!node.getArgs().get(i).accept(typeChecker, p.getArgs().get(i).getTypes()))
+				throw new TypeException();
 			context2.extend(p.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}
 		p.getBlock().accept(this, context2);
