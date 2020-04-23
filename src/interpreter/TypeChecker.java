@@ -3,6 +3,7 @@ package interpreter;
 import aps0.ASTboolean;
 import aps0.ASTclosure;
 import aps0.ASTfun;
+import aps0.ASTfunctionType;
 import aps0.ASTident;
 import aps0.ASTif;
 import aps0.ASTlambda;
@@ -15,10 +16,10 @@ import interfaces.IASTexpression;
 import interfaces.IASTvisitor;
 
 public class TypeChecker implements ExpressionEvaluator<Boolean, ASTtypes> {
-	
+
 	private IASTvisitor<Object, Context> v;
 	private Context ctx;
-	
+
 	public TypeChecker(IASTvisitor<Object, Context> v, Context ctx) {
 		this.v = v;
 		this.ctx = ctx;
@@ -71,10 +72,32 @@ public class TypeChecker implements ExpressionEvaluator<Boolean, ASTtypes> {
 	}
 
 	@Override
-	public Boolean visit(ASTlambda node, ASTtypes type) throws Exception { // TODO
-		System.out.println("LAMBDA TO DO");
-		return true;
+	public Boolean visit(ASTlambda node, ASTtypes type) throws Exception {
+		if (!(type.getType() instanceof ASTfunctionType))
+			return false;
+		ASTfunctionType t = (ASTfunctionType) type.getType();
+
+		ASTtypes c = t.getArgumentTypes();
+		int index = 0;
+		while (c != null) {
+			if (!node.getArgs().get(index++).getTypes().toString().equals(c.toString())) // TODO moche
+				return false;
+			c = c.getNext();
+		}
+
+		Object res = node.accept(v, ctx);
+		if (res instanceof Integer)
+			return t.getReturnType().equals(ASTprimitiveType.INTEGER);
+		if (res instanceof Boolean)
+			return t.getReturnType().equals(ASTprimitiveType.BOOLEAN);
 		
+		// TODO test du type de retour
+		// if (res instanceof ASTfun) {
+		// ASTfun f = (ASTfun) res;
+		// res = new ASTlambda(f.getArgs(), f.getExpr());
+		// }
+		// return ((IASTexpression) res).accept(this, type);
+		return true;
 	}
 
 	@Override
