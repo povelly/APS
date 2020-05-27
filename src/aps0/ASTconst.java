@@ -7,12 +7,12 @@ import interfaces.IASTvisitor;
 public class ASTconst implements IASTdeclaration {
 
 	private final ASTident name;
-	private final ASTtypes types;
+	private final ASTtypes type;
 	private final IASTexpression expr;
 
 	public ASTconst(ASTident name, ASTtypes types, IASTexpression expr) {
 		this.name = name;
-		this.types = types;
+		this.type = types;
 		this.expr = expr;
 	}
 
@@ -20,8 +20,8 @@ public class ASTconst implements IASTdeclaration {
 		return this.name;
 	}
 
-	public ASTtypes getTypes() {
-		return this.types;
+	public ASTtypes getType() {
+		return this.type;
 	}
 
 	public IASTexpression getExpr() {

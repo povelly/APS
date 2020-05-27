@@ -9,19 +9,19 @@ import interpreter.ExpressionEvaluator;
 public class ASTclosure implements IASTexpression {
 	
 	private final IASTexpression expr;
-	private final List<IASTexpression> arguments;
+	private final List<IASTexpression> args;
 	
-	public ASTclosure(IASTexpression expr, List<IASTexpression> arguments) {
+	public ASTclosure(IASTexpression expr, List<IASTexpression> args) {
 		this.expr = expr;
-		this.arguments = arguments;
+		this.args = args;
 	}
 
 	public IASTexpression getExpr() {
 		return this.expr;
 	}
 	
-	public List<IASTexpression> getArguments() {
-		return this.arguments;
+	public List<IASTexpression> getArgs() {
+		return this.args;
 	}
 
 	@Override

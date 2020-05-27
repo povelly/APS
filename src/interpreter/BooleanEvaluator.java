@@ -25,7 +25,7 @@ public class BooleanEvaluator implements ExpressionEvaluator<Boolean, Context> {
 
 	@Override
 	public Boolean visit(ASTnum node, Context context) throws Exception {
-		return node.getVal() == 0 ? false : true;
+		return node.getValue() == 0 ? false : true;
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class TypeChecker implements ExpressionEvaluator<Boolean, ASTtypes> {
 		ASTtypes c = t.getArgumentTypes();
 		int index = 0;
 		while (c != null) {
-			if (!node.getArgs().get(index++).getTypes().toString().equals(c.toString())) // TODO moche
+			if (!node.getArgs().get(index++).getType().toString().equals(c.toString())) // TODO moche
 				return false;
 			c = c.getNext();
 		}

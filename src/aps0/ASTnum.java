@@ -6,14 +6,14 @@ import interpreter.ExpressionEvaluator;
 
 public class ASTnum implements IASTexpression {
 	
-	private final Integer val;
+	private final Integer value;
 
-	public ASTnum(Integer val) {
-		this.val = val;
+	public ASTnum(Integer value) {
+		this.value = value;
 	}
 	
-	public Integer getVal() {
-		return this.val;
+	public Integer getValue() {
+		return this.value;
 	}
 
 	@Override

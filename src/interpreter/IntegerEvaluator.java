@@ -25,7 +25,7 @@ public class IntegerEvaluator implements ExpressionEvaluator<Integer, Context> {
 
 	@Override
 	public Integer visit(ASTnum node, Context context) throws Exception {
-		return node.getVal();
+		return node.getValue();
 	}
 
 	@Override

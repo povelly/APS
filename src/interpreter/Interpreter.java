@@ -78,7 +78,7 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 
 	@Override
 	public Object visit(ASTnum node, Context context) throws Exception {
-		return node.getVal();
+		return node.getValue();
 	}
 
 	@Override
@@ -153,18 +153,18 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 			f = (IFun) partialClosure.accept(this, context2); 
 		}
 
-		if (node.getArguments().size() != f.getArgs().size())
+		if (node.getArgs().size() != f.getArgs().size())
 			throw new ArityException(f);
 		TypeChecker typeChecker = new TypeChecker(this, context);
 		for (int i = 0; i < f.getArgs().size(); i++) {
-			if (!node.getArguments().get(i).accept(typeChecker, f.getArgs().get(i).getTypes()))
+			if (!node.getArgs().get(i).accept(typeChecker, f.getArgs().get(i).getType()))
 				throw new TypeException();
 			// System.out.println("typecheck: " + node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()));
 			
 			
 			// System.out.println("def:"+f.getArgs().get(i).getTypes().toString());
 			// System.out.println("call:"+node.getArguments().get(i).toString());
-			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
+			context2.extend(f.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}
 		return f.getExpr().accept(this, context2);
 	}
@@ -203,7 +203,7 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 	@Override
 	public Object visit(ASTwhile node, Context context) throws Exception {
 		while (node.getCondition().accept(booleanEvaluator, context))
-			node.getCorps().accept(this, context);
+			node.getBody().accept(this, context);
 		return null;
 	}
 
@@ -232,7 +232,7 @@ public class Interpreter implements IASTvisitor<Object, Context> {
 			throw new ArityException(p);
 		TypeChecker typeChecker = new TypeChecker(this, context);
 		for (int i = 0; i < p.getArgs().size(); i++) {
-			if (!node.getArgs().get(i).accept(typeChecker, p.getArgs().get(i).getTypes()))
+			if (!node.getArgs().get(i).accept(typeChecker, p.getArgs().get(i).getType()))
 				throw new TypeException();
 			context2.extend(p.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}

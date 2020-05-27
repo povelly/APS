@@ -12,13 +12,13 @@ public class ASTfun implements IASTdeclaration, IFun {
 	protected final ArrayList<ASTarg> args;
 	protected final IASTexpression expr;
 	protected final ASTident name;
-	protected final ASTtypes types;
+	protected final ASTtypes type;
 
-	public ASTfun(ASTident name, ASTtypes types, ArrayList<ASTarg> args, IASTexpression expr) {
+	public ASTfun(ASTident name, ASTtypes type, ArrayList<ASTarg> args, IASTexpression expr) {
 		this.args = args;
 		this.expr = expr;
 		this.name = name;
-		this.types = types;
+		this.type = type;
 	}
 
 	public ArrayList<ASTarg> getArgs() {
@@ -33,8 +33,8 @@ public class ASTfun implements IASTdeclaration, IFun {
 		return this.name;
 	}
 
-	public ASTtypes getTypes() {
-		return this.types;
+	public ASTtypes getType() {
+		return this.type;
 	}
 
 	@Override

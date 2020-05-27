@@ -12,7 +12,7 @@ public enum ASTprimitiveType implements IASTtype {
 	}
 	
 	@Override
-	public String asString() {
+	public String toString() {
 		return this.name;
 	}
 

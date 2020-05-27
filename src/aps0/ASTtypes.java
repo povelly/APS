@@ -38,7 +38,7 @@ public class ASTtypes implements IASTnode, IASTvisitable {
 		String types = "";
 		ASTtypes t = this;
 		while (t != null) {
-			types += t.type.asString();
+			types += t.type.toString();
 			if (t.next != null)
 				types += " * ";
 			t = t.next;

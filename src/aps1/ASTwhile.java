@@ -7,19 +7,19 @@ import interfaces.IASTvisitor;
 public class ASTwhile implements IASTstatement {
 	
 	private final IASTexpression condition;
-	private final ASTblock corps;
+	private final ASTblock body;
 	
-	public ASTwhile(IASTexpression condition, ASTblock corps) {
+	public ASTwhile(IASTexpression condition, ASTblock body) {
 		this.condition = condition;
-		this.corps = corps;
+		this.body = body;
 	}
 	
 	public IASTexpression getCondition() {
 		return this.condition;
 	}
 
-	public ASTblock getCorps() {
-		return this.corps;
+	public ASTblock getBody() {
+		return this.body;
 	}
 
 	@Override

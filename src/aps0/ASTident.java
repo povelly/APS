@@ -12,7 +12,7 @@ public class ASTident implements IASTexpression {
 		this.name = name;
 	}
 	
-	public String getString() {
+	public String getName() {
 		return this.name;
 	}
 
@@ -31,7 +31,7 @@ public class ASTident implements IASTexpression {
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof ASTident))
 			return false;
-		return this.name.equals(((ASTident) o).getString());
+		return this.name.equals(((ASTident) o).getName());
 	}
 	
 }

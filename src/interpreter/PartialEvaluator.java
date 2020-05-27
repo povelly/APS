@@ -32,7 +32,7 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 
 	@Override
 	public IASTexpression visit(ASTnum node, Context context) throws Exception {
-		return new ASTnum(node.getVal());
+		return new ASTnum(node.getValue());
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 			}
 			return ((IASTexpression) res).accept(this, context);
 		} catch (UnboundVariableException e) {
-			return new ASTident(node.getString());
+			return new ASTident(node.getName());
 		}
 	}
 
@@ -73,19 +73,19 @@ public class PartialEvaluator implements ExpressionEvaluator<IASTexpression, Con
 	@Override
 	public IASTexpression visit(ASTclosure node, Context context) throws Exception {
 		List<IASTexpression> arguments = new ArrayList<IASTexpression>();
-		for (IASTexpression arg : node.getArguments())
+		for (IASTexpression arg : node.getArgs())
 			arguments.add(arg.accept(this, context));
 		
 		ASTlambda f = (ASTlambda) node.getExpr().accept(this, context);
-		if (node.getArguments().size() != f.getArgs().size())
+		if (node.getArgs().size() != f.getArgs().size())
 			throw new ArityException(f);
 		
 		Context context2 = context.clone();
 		TypeChecker tc = new TypeChecker(this.v, context);
-		for (int i = 0; i < node.getArguments().size(); i++) {
-			if (!node.getArguments().get(i).accept(tc, f.getArgs().get(i).getTypes()))
+		for (int i = 0; i < node.getArgs().size(); i++) {
+			if (!node.getArgs().get(i).accept(tc, f.getArgs().get(i).getType()))
 				throw new TypeException();
-			context2.extend(f.getArgs().get(i).getName(), node.getArguments().get(i).accept(this, context));
+			context2.extend(f.getArgs().get(i).getName(), node.getArgs().get(i).accept(this, context));
 		}
 		return new ASTclosure(node.getExpr().accept(this, context2), arguments);
 	}

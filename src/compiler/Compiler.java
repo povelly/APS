@@ -49,14 +49,14 @@ public class Compiler implements IASTvisitor<String, Void> {
 
 	@Override
 	public String visit(ASTconst node, Void context) throws Exception {
-		return "const(" + node.getName().getString() + ", " + node.getTypes().accept(this, context) + ", "
+		return "const(" + node.getName().getName() + ", " + node.getType().accept(this, context) + ", "
 				+ node.getExpr().accept(this, context) + ")";
 	}
 
 	@Override
 	public String visit(ASTfun node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String fun = "funDef(" + node.getName().getString() + ", " + node.getTypes().accept(this, context)
+		String fun = "funDef(" + node.getName().getName() + ", " + node.getType().accept(this, context)
 				+ ", [";
 		for (int i = 0; i < args.size() - 1; i++)
 			fun += args.get(i).accept(this, context) + ", ";
@@ -67,8 +67,8 @@ public class Compiler implements IASTvisitor<String, Void> {
 	@Override
 	public String visit(ASTfunRec node, Void context) throws Exception {
 		List<ASTarg> args = node.getArgs();
-		String funRec = "funRecDef(" + node.getName().getString() + ", "
-				+ node.getTypes().accept(this, context) + ", [";
+		String funRec = "funRecDef(" + node.getName().getName() + ", "
+				+ node.getType().accept(this, context) + ", [";
 		for (int i = 0; i < args.size() - 1; i++)
 			funRec += args.get(i).accept(this, context) + ", ";
 		funRec += args.get(args.size() - 1).accept(this, context) + "], " + node.getExpr().accept(this, context) + ")";
@@ -77,7 +77,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 
 	@Override
 	public String visit(ASTarg node, Void context) throws Exception {
-		return "(" + node.getName().getString() + ", " + node.getTypes().accept(this, context) + ")";
+		return "(" + node.getName().getName() + ", " + node.getType().accept(this, context) + ")";
 	}
 
 	@Override
@@ -87,12 +87,12 @@ public class Compiler implements IASTvisitor<String, Void> {
 
 	@Override
 	public String visit(ASTnum node, Void context) throws Exception {
-		return node.getVal().toString();
+		return node.getValue().toString();
 	}
 
 	@Override
 	public String visit(ASTident node, Void context) throws Exception {
-		return node.getString();
+		return node.getName();
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 	
 	@Override
 	public String visit(ASTclosure node, Void context) throws Exception {
-		List<IASTexpression> exprs = node.getArguments();
+		List<IASTexpression> exprs = node.getArgs();
 		String s = "application(" + node.getExpr().accept(this, context) + ", (";
 		for (int i = 0; i < exprs.size() - 1; i++)
 			s += exprs.get(i).accept(this, context) + ", ";
@@ -134,7 +134,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 		String types = "";
 		ASTtypes currentType = node;
 		while (currentType != null) {
-			types += currentType.getType().asString();
+			types += currentType.getType().toString();
 //			types += currentType.getType().accept(this, context); TODO
 //			asString à définir dans ASTfunctionType
 			if (currentType.getNext() != null)
@@ -157,7 +157,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 	
 	@Override
 	public String visit(ASTvar var, Void context) throws Exception {
-		return "var(" + var.getVar().getString() + ", " + var.getType().accept(this, context) + ")";
+		return "var(" + var.getVar().getName() + ", " + var.getType().accept(this, context) + ")";
 	}
 
 	@Override
@@ -168,12 +168,12 @@ public class Compiler implements IASTvisitor<String, Void> {
 
 	@Override
 	public String visit(ASTset node, Void context) throws Exception {
-		return "set(" + node.getVar().getString() + ", " + node.getValue().accept(this, context) + ")";
+		return "set(" + node.getVar().getName() + ", " + node.getValue().accept(this, context) + ")";
 	}
 
 	@Override
 	public String visit(ASTwhile node, Void context) throws Exception {
-		return "while(" + node.getCondition().accept(this, context) + ", " + node.getCorps().accept(this, context) + ")";
+		return "while(" + node.getCondition().accept(this, context) + ", " + node.getBody().accept(this, context) + ")";
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 	@Override
 	public String visit(ASTcall node, Void context) throws Exception {
 		List<IASTexpression> args = node.getArgs();
-		String call = "call(" + node.getProc().getString() + ", [";
+		String call = "call(" + node.getProc().getName() + ", [";
 		for (int i = 0; i < args.size() - 1; i++)
 			call += args.get(i).accept(this, context) + ", ";
 		call += args.get(args.size() - 1).accept(this, context) + "])";

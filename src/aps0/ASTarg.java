@@ -6,19 +6,19 @@ import interfaces.IASTvisitor;
 public class ASTarg implements IASTargument {
 
 	private final ASTident name;
-	private final ASTtypes types;
+	private final ASTtypes type;
 
 	public ASTarg(ASTident name, ASTtypes types) {
 		this.name = name;
-		this.types = types;
+		this.type = types;
 	}
 
 	public ASTident getName() {
 		return this.name;
 	}
 
-	public ASTtypes getTypes() {
-		return this.types;
+	public ASTtypes getType() {
+		return this.type;
 	}
 
 	@Override

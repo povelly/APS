@@ -143,9 +143,9 @@ public class Context implements Iterable<Context> {
 		System.out.println("Ctx : (@:" + this.toString() + " size:" + this.size() + ")");
 		for (Context ctx : this) {
 			if (ctx.value != null)
-				System.out.println(ctx.variable.getString() + ": " + ctx.value);
+				System.out.println(ctx.variable.getName() + ": " + ctx.value);
 			else
-				System.out.println(ctx.variable.getString() + ": " + "null");
+				System.out.println(ctx.variable.getName() + ": " + "null");
 		}
 		System.out.println("=============");
 	}
