@@ -92,7 +92,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 
 	@Override
 	public String visit(ASTident node, Void context) throws Exception {
-		return node.getName();
+		return "var(" + node.getName() + ")";
 	}
 
 	@Override
@@ -122,10 +122,10 @@ public class Compiler implements IASTvisitor<String, Void> {
 	@Override
 	public String visit(ASTclosure node, Void context) throws Exception {
 		List<IASTexpression> exprs = node.getArgs();
-		String s = "application(" + node.getExpr().accept(this, context) + ", (";
+		String s = "application(" + node.getExpr().accept(this, context) + ", ";
 		for (int i = 0; i < exprs.size() - 1; i++)
 			s += exprs.get(i).accept(this, context) + ", ";
-		s += exprs.get(exprs.size() - 1).accept(this, context) + "))";
+		s += exprs.get(exprs.size() - 1).accept(this, context) + ")";
 		return s;
 	}
 
