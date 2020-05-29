@@ -6,9 +6,9 @@ SAMPLES_DIR="../samples"
 
 if test $# -lt 1
 then
-  echo "Usage 1 : bash evaluate.sh aps0"
-  echo "Usage 2 : bash evaluate.sh aps0/prog000.aps"
-  echo "Usage 3 : bash evaluate.sh aps0/prog000.aps aps0/prog001.aps"
+  echo "Usage 1 : bash eval.sh aps0"
+  echo "Usage 2 : bash eval.sh aps0/prog000.aps"
+  echo "Usage 3 : bash eval.sh aps0/prog000.aps aps0/prog001.aps"
   exit
 fi
 

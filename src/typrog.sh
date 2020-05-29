@@ -7,9 +7,9 @@ SAMPLES_DIR="../samples"
 
 if test $# -lt 1
 then
-  echo "Usage 1 : bash typer.sh aps0"
-  echo "Usage 2 : bash typer.sh aps0/prog000.aps"
-  echo "Usage 3 : bash typer.sh aps0/prog000.aps aps0/prog001.aps"
+  echo "Usage 1 : bash typrog.sh aps0"
+  echo "Usage 2 : bash typrog.sh aps0/prog000.aps"
+  echo "Usage 3 : bash typrog.sh aps0/prog000.aps aps0/prog001.aps"
   exit
 fi
 

@@ -6,9 +6,9 @@ SAMPLES_DIR="../samples"
 
 if test $# -lt 1
 then
-    echo "Usage 1 : bash compile.sh aps0"
-    echo "Usage 2 : bash compile.sh aps0/prog000.aps"
-    echo "Usage 3 : bash compile.sh aps0/prog000.aps aps0/prog001.aps"
+    echo "Usage 1 : bash prologTerm.sh aps0"
+    echo "Usage 2 : bash prologTerm.sh aps0/prog000.aps"
+    echo "Usage 3 : bash prologTerm.sh aps0/prog000.aps aps0/prog001.aps"
     exit
 fi
 
