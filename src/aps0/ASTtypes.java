@@ -40,7 +40,7 @@ public class ASTtypes implements IASTnode, IASTvisitable {
 		while (t != null) {
 			types += t.type.toString();
 			if (t.next != null)
-				types += " * ";
+				types += ", ";
 			t = t.next;
 		}
 		return types;

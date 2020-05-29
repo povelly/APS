@@ -22,8 +22,8 @@ public class ASTfunctionType implements IASTtype {
 
 	@Override
 	public String toString() {
-		String types = this.argumentTypes.toString();
-		types += " -> " + this.returnType.toString();
+		String types = "([" + this.argumentTypes.toString();
+		types += "], " + this.returnType.toString() + ")";
 		return types;
 	}
 

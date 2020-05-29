@@ -23,7 +23,7 @@ typeExpr(_, false, bool).
 /* NUM */
 typeExpr(_, Val, int) :- integer(Val),!.
 
-/* VAR */
+/* IDENT */
 typeExpr(G, var(V), R) :- envGet(G, V, R), !.
 
 /* IF */
@@ -49,21 +49,44 @@ typeExpr(G1, lambda(A, Ex), (T2, T1)) :- envAdd(G1, A, G2), typeArgs(A, T2), typ
 /* ECHO */
 typeStat(G, echo(E), void) :- typeExpr(G, E, int), !.
 
+/* SET */
+typeStat(G, set(V, E), void) :- typeExpr(G, V, T), typeExpr(G, E, T), !.
+
+/* IFBLOCK */
+typeStat(G, ifBlock(E, C, A), void) :- typeExpr(G, E, bool), typeBlock(G, C, void), typeBlock(G, A, void), !.
+
+/* WHILE */
+typeStat(G, while(E, C), void) :- typeExpr(G, E, bool), typeBlock(G, C, void), !.
+
+/* CALL */
+typeStat(G, call(P, Ex), void) :- typeList(G, Ex, T), /*typeBlock(G, P, (T, void)),*/ !.
+
 /* CONST */
-typeDec(G1, const(V,T,E), G2) :- typeExpr(G1, E, T), envGet([(V, T)], G1, G2), !.
+typeDec(G1, const(V,T,E), G2) :- typeExpr(G1, E, T), envAdd([(V, T)], G1, G2), !.
 
 /* FUN */
-typeDec(G1, funDef(V, T1, A, E), G2) :- envAdd(A, G1, G3), typeExpr(G3, E, T1), typeArgs(A, T2), envAdd([(V, (T2, T1))], G1, G2), !.
+typeDec(G1, funDef(V, T1, A, E), G2) :- envAdd(A, G1, G3), typeExpr(G3, E, T1), typeArgs(A, T2), envAdd(G1, [(V, (T2, T1))], G2), !.
 
 /* FUN REC */
-typeDec(G1, funRecDef(V, T1, A, E), G2) :- typeArgs(A, T2), envAdd(G1, [(T2,T1)|A], G3), typeExpr(G3, E, T1), envAdd([(V, (T2, T1))], G1, G2), !.
+typeDec(G1, funRecDef(V, T1, A, E), G2) :- typeArgs(A, T2), envAdd(G1, [(V, (T2,T1))|A], G3), typeExpr(G3, E, T1), envAdd([(V, (T2, T1))], G1, G2), !.
+
+/* VAR */
+typeDec(G1, var(V, T), G2) :- envAdd(G1, [(V, T)], G2), !.
+
+/* PROC */
+typeDec(G1, proc(V, A, B), G2) :- envAdd(G1, A, G3), typeBlock(G3, B, void), typeArgs(A, T2), envAdd(G1, [(V, (T2, void))], G2), !.
+
+/* PROC REC */
+
+/* BLOCK */
+typeBlock(G, block(B), void) :- typeCommands(G, B, void).
 
 /* ARGS */
 typeArgs([],[]).
 typeArgs([(_,Type)|L], [Type|R]) :- typeArgs(L,R).
 
 /* COMMANDS */
-typeCommands(_, [], void) :- !.
+typeCommands(_, [], void).
 typeCommands(G, [S|L], void) :- typeStat(G, S, void), typeCommands(G, L, void), !.
 typeCommands(G1, [D|L], void) :- typeDec(G1, D, G2), typeCommands(G2, L, void), !.
 
@@ -87,28 +110,14 @@ exitCode(_) :- halt(1).
 /*
 LES TRUCS QUI DECONNENT
 
-- Application
-- funRec car appli marche pas
+- PROC / PROC REC
+- CALL
 
 */
 
 
 
 
-/*
-typeCheck(P, ok) :- typeProgram(P).
 
-typeProgram(prog(Cmds)):-
-        context_init(Context1),
-        typeCommands(Context1, Cmds, void), !.
-        
+typeCheck(P, ok) :- typeProg(P).
 typeCheck(_, ko).
-
-typeCommands(Context, [Stat|Cmds], void):-
-        typeStat(Context, Stat, void),
-        typeCommands(Context, Cmds, void).
-typeCommands(Context, [Dec|Cmds], void):-
-        typeDec(Context, Dec, New_Context),
-        typeCommands(New_Context, Cmds, void).
-typeCommands(_, [], void).
-*/
