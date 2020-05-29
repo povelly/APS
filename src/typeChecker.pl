@@ -5,9 +5,13 @@ print(R),
 nl,
 exitCode(R).
 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%     AUXILIARY     %%
+%%%%%%%%%%%%%%%%%%%%%%%
+
 typeList(_, [], []).
 typeList(G, [E|L], [T|R]):- typeExpr(G, E, T), typeList(G, L, R), !.
-
 
 envAdd([], V, V).
 envAdd([H|T], V, [H|R]) :- envAdd(T, V, R), !.
@@ -15,6 +19,11 @@ envAdd([H|T], V, [H|R]) :- envAdd(T, V, R), !.
 envGet([], _, undefined).
 envGet([(K, V)|_], K, V) :- !.
 envGet([_|T], K, R) :- envGet(T, K, R), !.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%    EXPRESSIONS    %%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 /* BOOL */
 typeExpr(_, true, bool).
@@ -44,7 +53,12 @@ typeExpr(G, div(E1,E2), int) :- typeExpr(G,E1, int), typeExpr(G,E2, int).
 typeExpr(G1, application(F, Ex), T1) :- typeList(G1, Ex, T2), typeExpr(G1, F, (T2, T1)), !.
 
 /* ABS */
-typeExpr(G1, lambda(A, Ex), (T2, T1)) :- envAdd(G1, A, G2), typeArgs(A, T2), typeExpr(G2, Ex, T1), !.
+typeExpr(G1, lambda(A, Ex), (T2, T1)) :- envAdd(A, G1, G2), typeArgs(A, T2), typeExpr(G2, Ex, T1), !.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%     STATEMENT     %%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 /* ECHO */
 typeStat(G, echo(E), void) :- typeExpr(G, E, int), !.
@@ -59,65 +73,69 @@ typeStat(G, ifBlock(E, C, A), void) :- typeExpr(G, E, bool), typeBlock(G, C, voi
 typeStat(G, while(E, C), void) :- typeExpr(G, E, bool), typeBlock(G, C, void), !.
 
 /* CALL */
-typeStat(G, call(P, Ex), void) :- typeList(G, Ex, T), /*typeBlock(G, P, (T, void)),*/ !.
+typeStat(G, call(P, Ex), void) :- typeList(G, Ex, T), typeExpr(G, P, (T, void)), !.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%    DECLARATION    %%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 /* CONST */
 typeDec(G1, const(V,T,E), G2) :- typeExpr(G1, E, T), envAdd([(V, T)], G1, G2), !.
 
 /* FUN */
-typeDec(G1, funDef(V, T1, A, E), G2) :- envAdd(A, G1, G3), typeExpr(G3, E, T1), typeArgs(A, T2), envAdd(G1, [(V, (T2, T1))], G2), !.
+typeDec(G1, funDef(V, T1, A, E), G2) :- envAdd(A, G1, G3), typeExpr(G3, E, T1), typeArgs(A, T2), envAdd([(V, (T2, T1))], G1, G2), !.
 
 /* FUN REC */
-typeDec(G1, funRecDef(V, T1, A, E), G2) :- typeArgs(A, T2), envAdd(G1, [(V, (T2,T1))|A], G3), typeExpr(G3, E, T1), envAdd([(V, (T2, T1))], G1, G2), !.
+typeDec(G1, funRecDef(V, T1, A, E), G2) :- typeArgs(A, T2), envAdd([(V, (T2,T1))|A], G1, G3), typeExpr(G3, E, T1), envAdd([(V, (T2, T1))], G1, G2), !.
 
 /* VAR */
-typeDec(G1, var(V, T), G2) :- envAdd(G1, [(V, T)], G2), !.
+typeDec(G1, var(V, T), G2) :- envAdd([(V, T)], G1, G2), !.
 
 /* PROC */
-typeDec(G1, proc(V, A, B), G2) :- envAdd(G1, A, G3), typeBlock(G3, B, void), typeArgs(A, T2), envAdd(G1, [(V, (T2, void))], G2), !.
+typeDec(G1, proc(V, A, B), G2) :- envAdd(A, G1, G3), typeBlock(G3, B, void), typeArgs(A, T2), envAdd([(V, (T2, void))], G1, G2), !.
 
 /* PROC REC */
+typeDec(G1, proc(V, A, B), G2) :- typeArgs(A, T2), envAdd([(V, (T2, void))|A], G1, G3), typeBlock(G3, B, void), envAdd([(V, (T2, void))], G1, G2), !.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%       BLOCK       %%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 /* BLOCK */
 typeBlock(G, block(B), void) :- typeCommands(G, B, void).
 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%     ARGUMENT      %%
+%%%%%%%%%%%%%%%%%%%%%%%
+
 /* ARGS */
 typeArgs([],[]).
 typeArgs([(_,Type)|L], [Type|R]) :- typeArgs(L,R).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%     COMMANDS      %%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 /* COMMANDS */
 typeCommands(_, [], void).
 typeCommands(G, [S|L], void) :- typeStat(G, S, void), typeCommands(G, L, void), !.
 typeCommands(G1, [D|L], void) :- typeDec(G1, D, G2), typeCommands(G2, L, void), !.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%      PROGRAM      %%
+%%%%%%%%%%%%%%%%%%%%%%%
+
 /* PROGRAM */
 typeProg(P) :- typeCommands([], P, void).
 
  
-    
-/* quand ça peut prendre 2 chemin il faut mettre le !*/    
-    
-    
-
-/*typeProg(P) :- typeCommand(CMDS).*/
-/*typeCommand(CMDS) :- typeStat(STAT).
-typeCommand(CMDS) :- typeDec(DEC).*/
-
-
 exitCode(ok) :- halt(0).
 exitCode(_) :- halt(1).
-
-/*
-LES TRUCS QUI DECONNENT
-
-- PROC / PROC REC
-- CALL
-
-*/
-
-
-
-
 
 typeCheck(P, ok) :- typeProg(P).
 typeCheck(_, ko).

@@ -199,7 +199,7 @@ public class Compiler implements IASTvisitor<String, Void> {
 	@Override
 	public String visit(ASTcall node, Void context) throws Exception {
 		List<IASTexpression> args = node.getArgs();
-		String call = "call(" + node.getProc().getName() + ", [";
+		String call = "call(var(" + node.getProc().getName() + "), [";
 		for (int i = 0; i < args.size() - 1; i++)
 			call += args.get(i).accept(this, context) + ", ";
 		call += args.get(args.size() - 1).accept(this, context) + "])";
