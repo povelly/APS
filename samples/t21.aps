@@ -1,4 +1,0 @@
-[
-  CONST x int 1;
-  ECHO x
-]

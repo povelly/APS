@@ -1,4 +1,0 @@
-[
-  CONST x int 3;
-  ECHO (add (sub x 2) 6)
-]

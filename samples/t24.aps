@@ -1,6 +1,0 @@
-[
-  VAR x int;
-  SET x 0;
-  IF true [ SET x 1; ECHO x; SET x 2; ECHO x ] [ ECHO 5 ];
-  ECHO x
-]

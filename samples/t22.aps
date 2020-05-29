@@ -1,7 +1,0 @@
-[
-  VAR x int;
-  SET x 1;
-  ECHO x;
-  SET x 3;
-  ECHO x
-]

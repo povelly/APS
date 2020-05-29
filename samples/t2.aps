@@ -1,8 +1,0 @@
-[
-  CONST x int 3;
-  ECHO x
-]
-
-
-
-
